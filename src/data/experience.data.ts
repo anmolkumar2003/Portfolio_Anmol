@@ -5,7 +5,7 @@ export const experienceData: readonly Experience[] = [
     id: 'caplus-tech',
     organization: 'CAPLUS TECH',
     kind: 'employment',
-    location: null,
+    location: 'Mohali, Punjab, India',
     startDate: '2024-01',
     endDate: null,
     currentTitle: 'Jr. iOS Developer',

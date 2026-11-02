@@ -14,6 +14,7 @@ import { useProjectsViewModel } from '@viewmodels';
 import { DeviceMockup } from '@views/components/DeviceMockup';
 import { FadeIn } from '@views/components/FadeIn';
 import { SectionHeading } from '@views/components/SectionHeading';
+import { TiltCard } from '@views/components/TiltCard';
 import styles from './ProjectsSection.module.scss';
 
 const featureIcons: Record<string, LucideIcon> = {
@@ -30,7 +31,15 @@ const featureIcons: Record<string, LucideIcon> = {
   stack: Cloud,
 };
 
-function AppStoreLink({ url }: { url: string | null }) {
+function AppStoreLink({
+  url,
+  projectTitle,
+  onTrack,
+}: {
+  url: string | null;
+  projectTitle: string;
+  onTrack: (projectTitle: string) => void;
+}) {
   if (!url) {
     return null;
   }
@@ -41,6 +50,7 @@ function AppStoreLink({ url }: { url: string | null }) {
       href={url}
       target="_blank"
       rel="noreferrer noopener"
+      onClick={() => onTrack(projectTitle)}
     >
       <Store size={16} aria-hidden="true" />
       View on App Store
@@ -137,6 +147,7 @@ export function ProjectsSection() {
     chipLabels,
     kindLabel,
     hasProjects,
+    trackAppStoreClick,
   } = useProjectsViewModel();
   const reduceMotion = useReducedMotion();
 
@@ -172,11 +183,13 @@ export function ProjectsSection() {
           >
             {caseStudies.map((project, index) => (
               <FadeIn key={project.id} delay={index * 0.05} mode="mount">
+                <TiltCard>
                 <article className={styles.showcase}>
                   <div className={styles.visual}>
                     <DeviceMockup
                       title={project.title}
                       screenshotSrc={project.screenshotSrc}
+                      screenId={project.id}
                       size="lg"
                       animated
                     />
@@ -205,19 +218,26 @@ export function ProjectsSection() {
                       </div>
                     ) : null}
                     <FeatureGroups project={project} />
-                    <AppStoreLink url={project.appStoreUrl} />
+                    <AppStoreLink
+                      url={project.appStoreUrl}
+                      projectTitle={project.title}
+                      onTrack={trackAppStoreClick}
+                    />
                   </div>
                 </article>
+                </TiltCard>
               </FadeIn>
             ))}
             {compactProjects.length > 0 ? (
               <div className={styles.compactGrid}>
                 {compactProjects.map((project, index) => (
                   <FadeIn key={project.id} delay={index * 0.05} mode="mount">
+                    <TiltCard>
                     <article className={styles.compactCard}>
                       <DeviceMockup
                         title={project.title}
                         screenshotSrc={project.screenshotSrc}
+                        screenId={project.id}
                         size="sm"
                         animated
                       />
@@ -229,9 +249,14 @@ export function ProjectsSection() {
                         <h3>{project.title}</h3>
                         {project.summary ? <p>{project.summary}</p> : null}
                         <ProjectChips labels={chipLabels(project)} />
-                        <AppStoreLink url={project.appStoreUrl} />
+                        <AppStoreLink
+                      url={project.appStoreUrl}
+                      projectTitle={project.title}
+                      onTrack={trackAppStoreClick}
+                    />
                       </div>
                     </article>
+                    </TiltCard>
                   </FadeIn>
                 ))}
               </div>

@@ -1,5 +1,10 @@
 import { useCallback, useMemo, useState } from 'react';
-import { profileRepository, type IProfileRepository } from '@repositories';
+import { analyticsEvents } from '@models';
+import {
+  analyticsRepository,
+  profileRepository,
+  type IProfileRepository,
+} from '@repositories';
 
 export function useContactViewModel(
   repository: IProfileRepository = profileRepository,
@@ -10,7 +15,13 @@ export function useContactViewModel(
   const phoneHref = `tel:${profile.phone.replace(/\s+/g, '')}`;
   const mailHref = `mailto:${profile.email}`;
 
+  const trackContactClick = useCallback((channel: string) => {
+    analyticsRepository.track(analyticsEvents.contactClick, { channel });
+  }, []);
+
   const copyEmail = useCallback(async () => {
+    trackContactClick('copy_email');
+
     try {
       await navigator.clipboard.writeText(profile.email);
       setCopied(true);
@@ -20,7 +31,7 @@ export function useContactViewModel(
     } catch {
       setCopied(false);
     }
-  }, [profile.email]);
+  }, [profile.email, trackContactClick]);
 
   return {
     email: profile.email,
@@ -32,5 +43,6 @@ export function useContactViewModel(
     mailHref,
     copied,
     copyEmail,
+    trackContactClick,
   };
 }

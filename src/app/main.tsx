@@ -1,7 +1,10 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { analyticsRepository } from '@repositories';
 import '@styles/global.scss';
 import { App } from './App';
+
+analyticsRepository.init();
 
 const rootElement = document.getElementById('root');
 

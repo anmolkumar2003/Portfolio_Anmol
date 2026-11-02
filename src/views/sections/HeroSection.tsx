@@ -1,13 +1,25 @@
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { MapPin } from 'lucide-react';
-import { useProfileViewModel } from '@viewmodels';
+import { useRef } from 'react';
+import { useContactViewModel, useProfileViewModel, useProjectsViewModel } from '@viewmodels';
 import { Button } from '@views/components/Button';
 import { DeviceMockup } from '@views/components/DeviceMockup';
 import styles from './HeroSection.module.scss';
 
 export function HeroSection() {
-  const { profile, hasResume, resumeUrl } = useProfileViewModel();
+  const { profile, hasResume, resumeUrl, resumeFileName, trackResumeDownloadClick } =
+    useProfileViewModel();
+  const { trackHeroProjectsClick } = useProjectsViewModel();
+  const { trackContactClick } = useContactViewModel();
   const reduceMotion = useReducedMotion();
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'],
+  });
+  const copyY = useTransform(scrollYProgress, [0, 1], [0, reduceMotion ? 0 : 28]);
+  const deviceY = useTransform(scrollYProgress, [0, 1], [0, reduceMotion ? 0 : -40]);
+  const layerY = useTransform(scrollYProgress, [0, 1], [0, reduceMotion ? 0 : 50]);
 
   const container = {
     hidden: {},
@@ -20,19 +32,24 @@ export function HeroSection() {
   };
 
   const item = {
-    hidden: { opacity: 0, y: 22 },
+    hidden: { opacity: 0, y: 22, rotateX: 8 },
     show: {
       opacity: 1,
       y: 0,
+      rotateX: 0,
       transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
     },
   };
 
   return (
-    <section className={styles.hero} id="home" aria-labelledby="home-heading">
+    <section className={styles.hero} id="home" aria-labelledby="home-heading" ref={heroRef}>
+      <motion.div className={styles.depthA} style={{ y: layerY }} aria-hidden="true" />
+      <motion.div className={styles.depthB} style={{ y: copyY }} aria-hidden="true" />
       <div className={`container ${styles.grid}`}>
+        <motion.div style={{ y: copyY }}>
         <motion.div
           className={styles.copy}
+          style={{ transformPerspective: 900 }}
           variants={reduceMotion ? undefined : container}
           initial={reduceMotion ? undefined : 'hidden'}
           animate={reduceMotion ? undefined : 'show'}
@@ -63,24 +80,43 @@ export function HeroSection() {
             ))}
           </motion.ul>
           <motion.div className={styles.actions} variants={reduceMotion ? undefined : item}>
-            <Button href="#projects">Explore My Work</Button>
-            <Button href="#contact" variant="secondary">
+            <Button href="#projects" onClick={trackHeroProjectsClick}>
+              Explore My Work
+            </Button>
+            <Button
+              href="#contact"
+              variant="secondary"
+              onClick={() => trackContactClick('hero_cta')}
+            >
               Contact Me
             </Button>
             {hasResume && resumeUrl ? (
-              <Button href={resumeUrl} variant="secondary">
+              <Button
+                href={resumeUrl}
+                variant="secondary"
+                download={resumeFileName}
+                onClick={trackResumeDownloadClick}
+              >
                 Download Resume
               </Button>
             ) : null}
           </motion.div>
         </motion.div>
+        </motion.div>
+        <motion.div style={{ y: deviceY }} className={styles.device}>
         <motion.div
-          className={styles.device}
-          initial={reduceMotion ? undefined : { opacity: 0, y: 28, scale: 0.97 }}
-          animate={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.75, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+          initial={reduceMotion ? undefined : { opacity: 0, rotateY: -12, scale: 0.97 }}
+          animate={reduceMotion ? undefined : { opacity: 1, rotateY: 0, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
         >
-          <DeviceMockup title={profile.name} size="lg" />
+          <DeviceMockup
+            title={profile.name}
+            screenId="hero"
+            size="lg"
+            floating
+            interactive
+          />
+        </motion.div>
         </motion.div>
       </div>
     </section>

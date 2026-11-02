@@ -9,6 +9,7 @@ interface ButtonProps {
   type?: 'button' | 'submit';
   ariaLabel?: string;
   ariaCurrent?: 'page' | undefined;
+  download?: string;
 }
 
 export function Button({
@@ -19,11 +20,13 @@ export function Button({
   type = 'button',
   ariaLabel,
   ariaCurrent,
+  download,
 }: ButtonProps) {
   const className = `${styles.button} ${styles[variant]}`;
 
   if (href) {
     const isHash = href.startsWith('#');
+    const isDownload = Boolean(download);
 
     return (
       <a
@@ -32,8 +35,9 @@ export function Button({
         onClick={onClick}
         aria-label={ariaLabel}
         aria-current={ariaCurrent}
-        target={isHash ? undefined : '_blank'}
-        rel={isHash ? undefined : 'noreferrer noopener'}
+        download={download}
+        target={isHash || isDownload ? undefined : '_blank'}
+        rel={isHash || isDownload ? undefined : 'noreferrer noopener'}
       >
         {children}
       </a>

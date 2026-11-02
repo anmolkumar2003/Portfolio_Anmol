@@ -30,9 +30,10 @@ export function FadeIn({
     return (
       <motion.div
         className={className}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: 20, rotateX: 8 }}
+        animate={{ opacity: 1, y: 0, rotateX: 0 }}
         transition={transition}
+        style={{ transformPerspective: 900 }}
       >
         {children}
       </motion.div>
@@ -42,10 +43,11 @@ export function FadeIn({
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 28, rotateX: 8 }}
+      whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
       viewport={{ once: true, amount: 0.14, margin: '0px 0px -6% 0px' }}
       transition={transition}
+      style={{ transformPerspective: 900 }}
     >
       {children}
     </motion.div>

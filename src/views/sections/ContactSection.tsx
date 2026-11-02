@@ -15,6 +15,7 @@ export function ContactSection() {
     phoneHref,
     copied,
     copyEmail,
+    trackContactClick,
   } = useContactViewModel();
 
   return (
@@ -29,7 +30,11 @@ export function ContactSection() {
         <FadeIn>
           <ul className={styles.list}>
             <li className={styles.item}>
-              <a className={styles.link} href={mailHref}>
+              <a
+                className={styles.link}
+                href={mailHref}
+                onClick={() => trackContactClick('email')}
+              >
                 <Mail size={18} aria-hidden="true" />
                 <span>{email}</span>
               </a>
@@ -39,19 +44,35 @@ export function ContactSection() {
               </Button>
             </li>
             <li className={styles.item}>
-              <a className={styles.link} href={phoneHref}>
+              <a
+                className={styles.link}
+                href={phoneHref}
+                onClick={() => trackContactClick('phone')}
+              >
                 <Phone size={18} aria-hidden="true" />
                 <span>{phone}</span>
               </a>
             </li>
             <li className={styles.item}>
-              <a className={styles.link} href={github} target="_blank" rel="noreferrer noopener">
+              <a
+                className={styles.link}
+                href={github}
+                target="_blank"
+                rel="noreferrer noopener"
+                onClick={() => trackContactClick('github')}
+              >
                 GitHub
                 <ArrowUpRight size={16} aria-hidden="true" />
               </a>
             </li>
             <li className={styles.item}>
-              <a className={styles.link} href={linkedin} target="_blank" rel="noreferrer noopener">
+              <a
+                className={styles.link}
+                href={linkedin}
+                target="_blank"
+                rel="noreferrer noopener"
+                onClick={() => trackContactClick('linkedin')}
+              >
                 LinkedIn
                 <ArrowUpRight size={16} aria-hidden="true" />
               </a>
