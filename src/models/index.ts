@@ -1,3 +1,10 @@
+export {
+  analyticsEvents,
+} from './analytics';
+export type {
+  AnalyticsEventName,
+  AnalyticsProps,
+} from './analytics';
 export type { ContentStatus } from './content';
 export type {
   Education,

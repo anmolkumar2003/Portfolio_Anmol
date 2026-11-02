@@ -2,38 +2,38 @@
 
 .hero {
   position: relative;
-  min-height: calc(100dvh - var(--header-height));
-  padding-top: var(--space-12);
-  overflow: hidden;
+  min-height: unset;
+  padding-block: var(--space-8) var(--space-10);
+  overflow-x: clip;
+  overflow-y: hidden;
   background:
     radial-gradient(circle at 12% 12%, rgba(37, 99, 235, 0.2), transparent 32%),
     radial-gradient(circle at 88% 18%, rgba(34, 211, 238, 0.12), transparent 30%),
     var(--color-bg);
 }
 
-.hero::before,
-.hero::after {
-  content: '';
+.depthA,
+.depthB {
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
   filter: blur(8px);
 }
 
-.hero::before {
+.depthA {
   top: 12%;
-  right: 18%;
-  width: 12rem;
-  height: 12rem;
-  background: rgba(59, 130, 246, 0.12);
+  right: 12%;
+  width: min(12rem, 42vw);
+  height: min(12rem, 42vw);
+  background: rgba(59, 130, 246, 0.14);
   animation: drift 18s ease-in-out infinite alternate;
 }
 
-.hero::after {
+.depthB {
   bottom: 8%;
-  left: 8%;
-  width: 9rem;
-  height: 9rem;
+  left: 6%;
+  width: min(9rem, 34vw);
+  height: min(9rem, 34vw);
   background: rgba(34, 211, 238, 0.08);
   animation: drift 22s ease-in-out infinite alternate-reverse;
 }
@@ -52,7 +52,7 @@
   position: relative;
   z-index: 1;
   display: grid;
-  gap: var(--space-12);
+  gap: var(--space-8);
   align-items: center;
 }
 
@@ -65,7 +65,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-4);
 }
 
 .pill {
@@ -80,8 +80,8 @@
 }
 
 .headline {
-  max-width: 14ch;
-  margin: var(--space-4) 0 var(--space-5);
+  max-width: none;
+  margin: var(--space-3) 0 var(--space-4);
 }
 
 .description {
@@ -92,7 +92,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
-  margin: var(--space-6) 0;
+  margin: var(--space-4) 0;
   list-style: none;
 }
 
@@ -117,16 +117,30 @@
   gap: var(--space-3);
 }
 
+.device {
+  justify-self: center;
+  width: min(100%, 18.5rem);
+}
+
 @include bp.up(bp.$lg) {
+  .hero {
+    padding-block: var(--space-10) var(--space-12);
+  }
+
+  .headline {
+    max-width: 14ch;
+  }
+
   .grid {
-    grid-template-columns: minmax(0, 1.1fr) minmax(16rem, 0.9fr);
-    gap: var(--space-16);
+    grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
+    gap: var(--space-8);
+    min-height: unset;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero::before,
-  .hero::after {
+  .depthA,
+  .depthB {
     animation: none;
   }
 

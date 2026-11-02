@@ -1,4 +1,10 @@
 export {
+  AnalyticsRepository,
+  analyticsRepository,
+} from './analytics.repository';
+export type { IAnalyticsRepository } from './analytics.repository';
+
+export {
   EducationRepository,
   educationRepository,
 } from './education.repository';

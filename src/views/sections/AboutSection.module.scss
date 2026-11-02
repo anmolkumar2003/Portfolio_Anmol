@@ -2,7 +2,7 @@
 
 .grid {
   display: grid;
-  gap: var(--space-8);
+  gap: var(--space-5);
 }
 
 .copy {
@@ -37,7 +37,7 @@
 
 @include bp.up(bp.$lg) {
   .grid {
-    gap: var(--space-8);
+    gap: var(--space-6);
   }
 }
 

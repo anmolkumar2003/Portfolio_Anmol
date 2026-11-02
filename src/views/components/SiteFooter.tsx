@@ -1,8 +1,9 @@
-import { useProfileViewModel } from '@viewmodels';
+import { useContactViewModel, useProfileViewModel } from '@viewmodels';
 import styles from './SiteFooter.module.scss';
 
 export function SiteFooter() {
   const { profile } = useProfileViewModel();
+  const { trackContactClick } = useContactViewModel();
 
   return (
     <footer className={styles.footer}>
@@ -13,15 +14,30 @@ export function SiteFooter() {
         </div>
         <ul className={styles.links}>
           <li>
-            <a href={`mailto:${profile.email}`}>Email</a>
+            <a
+              href={`mailto:${profile.email}`}
+              onClick={() => trackContactClick('footer_email')}
+            >
+              Email
+            </a>
           </li>
           <li>
-            <a href={profile.social.github} target="_blank" rel="noreferrer noopener">
+            <a
+              href={profile.social.github}
+              target="_blank"
+              rel="noreferrer noopener"
+              onClick={() => trackContactClick('footer_github')}
+            >
               GitHub
             </a>
           </li>
           <li>
-            <a href={profile.social.linkedin} target="_blank" rel="noreferrer noopener">
+            <a
+              href={profile.social.linkedin}
+              target="_blank"
+              rel="noreferrer noopener"
+              onClick={() => trackContactClick('footer_linkedin')}
+            >
               LinkedIn
             </a>
           </li>
