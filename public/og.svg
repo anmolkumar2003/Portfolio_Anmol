@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#070B16"/>
+  <circle cx="1080" cy="80" r="220" fill="#2563EB" fill-opacity="0.18"/>
+  <circle cx="80" cy="560" r="180" fill="#22D3EE" fill-opacity="0.12"/>
+  <text x="80" y="250" fill="#22D3EE" font-family="Arial, sans-serif" font-size="28" letter-spacing="6">MOBILE APPLICATION DEVELOPER</text>
+  <text x="80" y="360" fill="#E8EEF8" font-family="Arial, sans-serif" font-size="84" font-weight="700">Anmol Kumar</text>
+  <text x="80" y="430" fill="#94A3B8" font-family="Arial, sans-serif" font-size="32">Building Powerful Mobile Experiences.</text>
+</svg>

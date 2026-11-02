@@ -1,0 +1,208 @@
+@use 'breakpoints' as bp;
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--nav-z);
+  height: var(--header-height);
+  border-bottom: 1px solid transparent;
+  background: rgba(7, 11, 22, 0.72);
+  backdrop-filter: blur(18px) saturate(1.15);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+  transition:
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    background-color 220ms ease;
+}
+
+.scrolled {
+  border-bottom-color: var(--color-border);
+  background: rgba(7, 11, 22, 0.94);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  height: var(--header-height);
+}
+
+.brand {
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: -0.03em;
+  transition: color 180ms ease;
+}
+
+.brand:hover {
+  color: var(--color-cyan);
+}
+
+.desktopNav {
+  display: none;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.navList {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  list-style: none;
+}
+
+.navButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.75rem;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 999px;
+  transition: color 180ms ease, background-color 180ms ease, transform 180ms ease;
+}
+
+.navLabel {
+  position: relative;
+  z-index: 1;
+}
+
+.navButton:hover {
+  color: var(--color-text);
+  transform: translateY(-1px);
+}
+
+.activePill {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.16);
+}
+
+.navButton.active:not(.cta) {
+  color: var(--color-text);
+}
+
+.cta {
+  margin-left: 0.35rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(180deg, var(--color-accent) 0%, var(--color-accent-strong) 100%);
+  color: #f8fbff;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.22);
+}
+
+.cta:hover,
+.cta.active {
+  background: var(--color-accent-strong);
+  color: #f8fbff;
+  transform: translateY(-1px);
+}
+
+.menuToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color 180ms ease, transform 180ms ease, background-color 180ms ease;
+}
+
+.menuToggle:hover {
+  border-color: var(--color-cyan);
+}
+
+.menuToggle:active {
+  transform: scale(0.96);
+}
+
+.mobilePanel {
+  position: fixed;
+  inset: var(--header-height) 0 0;
+  z-index: calc(var(--nav-z) + 1);
+  display: grid;
+  align-content: start;
+  gap: var(--space-6);
+  padding: var(--space-6) var(--space-4);
+  background: rgba(7, 11, 22, 0.96);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.mobileList {
+  display: grid;
+  gap: var(--space-2);
+  list-style: none;
+}
+
+.mobileList button {
+  width: 100%;
+  padding: 0.9rem 0.2rem;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: color 180ms ease;
+}
+
+.mobileList button:hover {
+  color: var(--color-cyan);
+}
+
+.mobileCta {
+  margin-top: 0.4rem;
+  padding: 0.9rem 1rem !important;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--color-accent) 0%, var(--color-accent-strong) 100%) !important;
+  color: #f8fbff !important;
+  text-align: center !important;
+}
+
+.mobileClose {
+  width: fit-content;
+  padding: 0.5rem 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mobileClose:hover {
+  color: var(--color-cyan);
+}
+
+@include bp.up(bp.$lg) {
+  .desktopNav {
+    display: flex;
+  }
+
+  .menuToggle,
+  .mobilePanel {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navButton:hover,
+  .cta:hover,
+  .menuToggle:active {
+    transform: none;
+  }
+}

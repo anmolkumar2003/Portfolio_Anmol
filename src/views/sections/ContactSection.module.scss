@@ -1,0 +1,56 @@
+@use 'breakpoints' as bp;
+
+.list {
+  display: grid;
+  gap: var(--space-4);
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-charcoal);
+  min-width: 0;
+  transition: transform 180ms ease, border-color 180ms ease;
+}
+
+.item:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-border-strong);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--color-text);
+  text-decoration: none;
+  font-size: 1.05rem;
+  transition: color 180ms ease;
+}
+
+.link:hover {
+  color: var(--color-cyan);
+}
+
+.copy {
+  color: var(--color-text-muted);
+}
+
+@include bp.up(bp.$md) {
+  .list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item:hover {
+    transform: none;
+  }
+}

@@ -1,0 +1,136 @@
+@use 'breakpoints' as bp;
+
+.hero {
+  position: relative;
+  min-height: calc(100dvh - var(--header-height));
+  padding-top: var(--space-12);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(37, 99, 235, 0.2), transparent 32%),
+    radial-gradient(circle at 88% 18%, rgba(34, 211, 238, 0.12), transparent 30%),
+    var(--color-bg);
+}
+
+.hero::before,
+.hero::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(8px);
+}
+
+.hero::before {
+  top: 12%;
+  right: 18%;
+  width: 12rem;
+  height: 12rem;
+  background: rgba(59, 130, 246, 0.12);
+  animation: drift 18s ease-in-out infinite alternate;
+}
+
+.hero::after {
+  bottom: 8%;
+  left: 8%;
+  width: 9rem;
+  height: 9rem;
+  background: rgba(34, 211, 238, 0.08);
+  animation: drift 22s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(18px, -14px, 0);
+  }
+}
+
+.grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--space-12);
+  align-items: center;
+}
+
+.copy,
+.device {
+  min-width: 0;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.headline {
+  max-width: 14ch;
+  margin: var(--space-4) 0 var(--space-5);
+}
+
+.description {
+  max-width: 38rem;
+}
+
+.labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-6) 0;
+  list-style: none;
+}
+
+.labels li {
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-size: 0.85rem;
+  transition: transform 180ms ease, border-color 180ms ease;
+}
+
+.labels li:hover {
+  transform: translateY(-1px);
+  border-color: var(--color-border-strong);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+@include bp.up(bp.$lg) {
+  .grid {
+    grid-template-columns: minmax(0, 1.1fr) minmax(16rem, 0.9fr);
+    gap: var(--space-16);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero::before,
+  .hero::after {
+    animation: none;
+  }
+
+  .labels li:hover {
+    transform: none;
+  }
+}

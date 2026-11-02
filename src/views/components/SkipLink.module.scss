@@ -1,0 +1,16 @@
+.link {
+  position: absolute;
+  left: var(--space-4);
+  top: -4rem;
+  z-index: 60;
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-cyan);
+  color: #041018;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+}
+
+.link:focus {
+  top: var(--space-4);
+}

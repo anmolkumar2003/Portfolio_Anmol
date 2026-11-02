@@ -1,0 +1,278 @@
+@use 'breakpoints' as bp;
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-10, 2.5rem);
+}
+
+.filter {
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.filter:hover,
+.active {
+  color: var(--color-text);
+  border-color: var(--color-cyan);
+  background: rgba(34, 211, 238, 0.08);
+}
+
+.filter:hover {
+  transform: translateY(-1px);
+}
+
+.results {
+  display: grid;
+  gap: var(--space-12);
+}
+
+.showcase,
+.compactCard {
+  min-width: 0;
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(180deg, var(--color-charcoal) 0%, var(--color-bg-elevated) 100%);
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.showcase:hover,
+.compactCard:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-glow);
+}
+
+.showcase {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.visual {
+  min-width: 0;
+  display: grid;
+  justify-items: center;
+  transition: transform 280ms ease;
+}
+
+.showcase:hover .visual {
+  transform: scale(1.02);
+}
+
+.details {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.note {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.kind,
+.status {
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.kind {
+  color: var(--color-cyan);
+  border: 1px solid var(--color-border);
+}
+
+.status {
+  color: #041018;
+  background: var(--color-cyan);
+}
+
+.contributionList {
+  display: grid;
+  gap: 0.55rem;
+  padding-left: 1.15rem;
+  color: var(--color-text-muted);
+}
+
+.storeLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: fit-content;
+  min-height: 2.6rem;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-strong);
+  background: transparent;
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: 600;
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease,
+    background-color 180ms ease;
+}
+
+.storeLink:hover {
+  color: var(--color-cyan);
+  border-color: var(--color-cyan);
+  transform: translateY(-1px);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  font-size: 0.82rem;
+  animation: chipIn 0.45s ease both;
+}
+
+.sectionTitle {
+  margin: 0 0 var(--space-3);
+  color: var(--color-text);
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+}
+
+@keyframes chipIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.featureGrid {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.featureCard {
+  min-width: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  transition: border-color 180ms ease, transform 180ms ease;
+}
+
+.featureCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-border-strong);
+}
+
+.featureHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  color: var(--color-cyan);
+}
+
+.featureHeader h5 {
+  color: var(--color-text);
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+}
+
+.featureCard ul {
+  display: grid;
+  gap: 0.4rem;
+  padding-left: 1.05rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.compactGrid {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.compactBody {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  min-width: 0;
+}
+
+.compactBody h3 {
+  font-size: 1.15rem;
+}
+
+.empty {
+  color: var(--color-text-muted);
+}
+
+@include bp.up(bp.$md) {
+  .featureGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .compactGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@include bp.up(bp.$lg) {
+  .showcase {
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+    align-items: center;
+    padding: var(--space-8);
+  }
+
+  .compactGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filter:hover,
+  .showcase:hover,
+  .compactCard:hover,
+  .featureCard:hover,
+  .showcase:hover .visual {
+    transform: none;
+  }
+
+  .chip,
+  .storeLink:hover {
+    animation: none;
+    transform: none;
+  }
+}

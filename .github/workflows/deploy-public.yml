@@ -1,0 +1,38 @@
+# Manual publish to the public GitHub Pages repository.
+# This workflow does not run on push and will not overwrite
+# anmolkumar2003/Portfolio until you dispatch it and provide
+# the PORTFOLIO_DEPLOY_TOKEN secret.
+name: Publish to public Portfolio repo
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build
+      - name: Publish dist
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.PORTFOLIO_DEPLOY_TOKEN }}
+          external_repository: anmolkumar2003/Portfolio
+          publish_branch: gh-pages
+          publish_dir: ./dist
+          force_orphan: true
+          commit_message: Publish portfolio production build
