@@ -2,10 +2,11 @@
 
 .hero {
   position: relative;
+  isolation: isolate;
   min-height: unset;
-  padding-block: var(--space-8) var(--space-10);
+  padding-block: var(--space-6) var(--space-10);
   overflow-x: clip;
-  overflow-y: hidden;
+  overflow-y: visible;
   background:
     radial-gradient(circle at 12% 12%, rgba(37, 99, 235, 0.2), transparent 32%),
     radial-gradient(circle at 88% 18%, rgba(34, 211, 238, 0.12), transparent 30%),
@@ -61,10 +62,15 @@
   min-width: 0;
 }
 
+.copy {
+  display: grid;
+  gap: 0;
+}
+
 .meta {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  gap: var(--space-2) var(--space-3);
   margin-bottom: var(--space-4);
 }
 
@@ -82,17 +88,20 @@
 .headline {
   max-width: none;
   margin: var(--space-3) 0 var(--space-4);
+  overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 
 .description {
   max-width: 38rem;
+  margin: 0;
 }
 
 .labels {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
-  margin: var(--space-4) 0;
+  margin: var(--space-5) 0;
   list-style: none;
 }
 
@@ -112,14 +121,38 @@
 }
 
 .actions {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: var(--space-3);
+  width: 100%;
+}
+
+.actions > * {
+  width: 100%;
+  justify-content: center;
 }
 
 .device {
   justify-self: center;
-  width: min(100%, 18.5rem);
+  width: min(100%, 16.5rem);
+  margin-top: var(--space-2);
+  padding-bottom: var(--space-2);
+}
+
+@include bp.up(bp.$sm) {
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .actions > * {
+    width: auto;
+    flex: 0 1 auto;
+  }
+
+  .device {
+    width: min(100%, 18.5rem);
+  }
 }
 
 @include bp.up(bp.$lg) {
@@ -129,12 +162,18 @@
 
   .headline {
     max-width: 14ch;
+    overflow-wrap: break-word;
   }
 
   .grid {
     grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
     gap: var(--space-8);
     min-height: unset;
+  }
+
+  .device {
+    margin-top: 0;
+    width: min(100%, 18.5rem);
   }
 }
 
