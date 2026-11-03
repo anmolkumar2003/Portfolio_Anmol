@@ -54,10 +54,6 @@ export function useNavigationViewModel(
     };
   }, [isMenuOpen]);
 
-  const openMenu = useCallback(() => {
-    setIsMenuOpen(true);
-  }, []);
-
   const closeMenu = useCallback(() => {
     setIsMenuOpen(false);
   }, []);
@@ -88,7 +84,6 @@ export function useNavigationViewModel(
   return {
     items,
     isMenuOpen,
-    openMenu,
     closeMenu,
     toggleMenu,
     scrollToSection,

@@ -12,18 +12,13 @@ import { ProjectsSection } from '@views/sections/ProjectsSection';
 import { SkillsSection } from '@views/sections/SkillsSection';
 
 export function HomePage() {
-  const { progress, isScrolled, activeSectionId, prefersReducedMotion } =
-    useScrollViewModel();
+  const { progress, isScrolled, activeSectionId } = useScrollViewModel();
 
   return (
     <>
       <SkipLink />
       <ScrollProgress progress={progress} />
-      <SiteHeader
-        activeSectionId={activeSectionId}
-        isScrolled={isScrolled}
-        prefersReducedMotion={prefersReducedMotion}
-      />
+      <SiteHeader activeSectionId={activeSectionId} isScrolled={isScrolled} />
       <main id="main">
         <HeroSection />
         <AboutSection />

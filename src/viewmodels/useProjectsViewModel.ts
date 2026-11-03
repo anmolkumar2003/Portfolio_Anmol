@@ -78,12 +78,6 @@ export function useProjectsViewModel(
     });
   }, []);
 
-  const trackHeroProjectsClick = useCallback(() => {
-    analyticsRepository.track(analyticsEvents.projectInteraction, {
-      action: 'hero_cta',
-    });
-  }, []);
-
   return {
     projects,
     filteredProjects,
@@ -97,6 +91,5 @@ export function useProjectsViewModel(
     chipLabels,
     kindLabel,
     trackAppStoreClick,
-    trackHeroProjectsClick,
   };
 }

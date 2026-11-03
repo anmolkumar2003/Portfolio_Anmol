@@ -1,7 +1,9 @@
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { MapPin } from 'lucide-react';
 import { useRef } from 'react';
-import { useContactViewModel, useProfileViewModel, useProjectsViewModel } from '@viewmodels';
+import { analyticsEvents } from '@models';
+import { analyticsRepository } from '@repositories';
+import { useContactViewModel, useProfileViewModel } from '@viewmodels';
 import { Button } from '@views/components/Button';
 import { DeviceMockup } from '@views/components/DeviceMockup';
 import styles from './HeroSection.module.scss';
@@ -9,8 +11,13 @@ import styles from './HeroSection.module.scss';
 export function HeroSection() {
   const { profile, hasResume, resumeUrl, resumeFileName, trackResumeDownloadClick } =
     useProfileViewModel();
-  const { trackHeroProjectsClick } = useProjectsViewModel();
   const { trackContactClick } = useContactViewModel();
+
+  const trackHeroProjectsClick = () => {
+    analyticsRepository.track(analyticsEvents.projectInteraction, {
+      action: 'hero_cta',
+    });
+  };
   const reduceMotion = useReducedMotion();
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
