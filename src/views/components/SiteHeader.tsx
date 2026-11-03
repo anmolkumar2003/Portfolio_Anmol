@@ -8,14 +8,9 @@ import styles from './SiteHeader.module.scss';
 interface SiteHeaderProps {
   activeSectionId: SectionId;
   isScrolled: boolean;
-  prefersReducedMotion: boolean;
 }
 
-export function SiteHeader({
-  activeSectionId,
-  isScrolled,
-  prefersReducedMotion,
-}: SiteHeaderProps) {
+export function SiteHeader({ activeSectionId, isScrolled }: SiteHeaderProps) {
   const {
     items,
     isMenuOpen,
@@ -86,7 +81,7 @@ export function SiteHeader({
 
   const goTo = (id: SectionId) => {
     closeReasonRef.current = 'navigate';
-    scrollToSection(id, prefersReducedMotion || Boolean(reduceMotion));
+    scrollToSection(id, Boolean(reduceMotion));
   };
 
   const onToggle = () => {

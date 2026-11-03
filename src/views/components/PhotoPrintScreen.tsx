@@ -1,9 +1,9 @@
 import { Crop, Images, Printer, RotateCw, SlidersHorizontal } from 'lucide-react';
-import photoCity from '@assets/screen/photo-city.jpg';
-import photoCoast from '@assets/screen/photo-coast.jpg';
-import photoMountain from '@assets/screen/photo-mountain.jpg';
-import photoPrint from '@assets/screen/photo-print.jpg';
-import photoWildflower from '@assets/screen/photo-wildflower.jpg';
+import photoCity from '@assets/screen/photo-city.webp';
+import photoCoast from '@assets/screen/photo-coast.webp';
+import photoMountain from '@assets/screen/photo-mountain.webp';
+import photoPrint from '@assets/screen/photo-print.webp';
+import photoWildflower from '@assets/screen/photo-wildflower.webp';
 import styles from './PhotoPrintScreen.module.scss';
 
 const thumbs = [photoCoast, photoCity, photoWildflower, photoMountain] as const;

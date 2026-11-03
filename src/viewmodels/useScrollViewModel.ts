@@ -3,7 +3,7 @@ import {
   navigationRepository,
   type INavigationRepository,
 } from '@repositories';
-import type { SectionId } from '@models';
+import { isSectionId, type SectionId } from '@models';
 
 export function useScrollViewModel(
   repository: INavigationRepository = navigationRepository,
@@ -11,24 +11,10 @@ export function useScrollViewModel(
   const [progress, setProgress] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<SectionId>('home');
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
-  useEffect(() => {
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const syncMotion = () => {
-      setPrefersReducedMotion(media.matches);
-    };
-
-    syncMotion();
-    media.addEventListener('change', syncMotion);
-
-    return () => {
-      media.removeEventListener('change', syncMotion);
-    };
-  }, []);
 
   useEffect(() => {
     const sectionIds = repository.getSectionIds();
+    let frameId = 0;
 
     const update = () => {
       const scrollable =
@@ -55,18 +41,32 @@ export function useScrollViewModel(
       setActiveSectionId(current);
     };
 
+    const scheduleUpdate = () => {
+      if (frameId !== 0) {
+        return;
+      }
+
+      frameId = window.requestAnimationFrame(() => {
+        frameId = 0;
+        update();
+      });
+    };
+
     update();
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate);
 
     const hash = window.location.hash.replace('#', '');
-    if (hash && sectionIds.includes(hash as SectionId)) {
+    if (isSectionId(hash) && sectionIds.includes(hash)) {
       document.getElementById(hash)?.scrollIntoView();
     }
 
     return () => {
-      window.removeEventListener('scroll', update);
-      window.removeEventListener('resize', update);
+      window.removeEventListener('scroll', scheduleUpdate);
+      window.removeEventListener('resize', scheduleUpdate);
+      if (frameId !== 0) {
+        window.cancelAnimationFrame(frameId);
+      }
     };
   }, [repository]);
 
@@ -74,6 +74,5 @@ export function useScrollViewModel(
     progress,
     isScrolled,
     activeSectionId,
-    prefersReducedMotion,
   };
 }

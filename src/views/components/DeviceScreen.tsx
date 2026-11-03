@@ -8,13 +8,13 @@ import {
   SlidersHorizontal,
   Wifi,
 } from 'lucide-react';
-import photoCity from '@assets/screen/photo-city.jpg';
-import photoCoast from '@assets/screen/photo-coast.jpg';
-import photoMountain from '@assets/screen/photo-mountain.jpg';
-import photoPasta from '@assets/screen/photo-pasta.jpg';
-import photoPrint from '@assets/screen/photo-print.jpg';
-import photoRecipe from '@assets/screen/photo-recipe.jpg';
-import photoWildflower from '@assets/screen/photo-wildflower.jpg';
+import photoCity from '@assets/screen/photo-city.webp';
+import photoCoast from '@assets/screen/photo-coast.webp';
+import photoMountain from '@assets/screen/photo-mountain.webp';
+import photoPasta from '@assets/screen/photo-pasta.webp';
+import photoPrint from '@assets/screen/photo-print.webp';
+import photoRecipe from '@assets/screen/photo-recipe.webp';
+import photoWildflower from '@assets/screen/photo-wildflower.webp';
 import { PhotoPrintScreen } from './PhotoPrintScreen';
 import styles from './DeviceScreen.module.scss';
 

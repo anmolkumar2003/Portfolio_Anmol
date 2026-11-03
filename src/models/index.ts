@@ -15,6 +15,7 @@ export type {
   ExperienceKind,
   ExperienceRole,
 } from './experience';
+export { isSectionId } from './navigation';
 export type { NavItem, SectionId } from './navigation';
 export type { AboutContent, Profile, SocialLinks } from './profile';
 export type {

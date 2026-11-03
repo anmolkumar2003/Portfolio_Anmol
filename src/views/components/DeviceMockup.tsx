@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useCallback, useState, type PointerEvent } from 'react';
-import iphone18ProBezel from '@assets/devices/iphone-18-pro-bezel.png';
+import iphone18ProBezel from '@assets/devices/iphone-18-pro-bezel.webp';
 import { useFinePointer } from '@views/hooks/useFinePointer';
 import { DeviceScreen } from './DeviceScreen';
 import { SafeImage } from './SafeImage';
