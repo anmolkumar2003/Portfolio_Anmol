@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { DEVICE_CATEGORIES } from '../../shared/telemetry';
+import { DEVICE_CATEGORIES } from '../../shared/telemetry.js';
 
 const keySchema = z
   .string()

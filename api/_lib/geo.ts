@@ -1,6 +1,6 @@
 import type { VercelRequest } from '@vercel/node';
-import { getServerEnv } from './env';
-import { readHeader } from './headers';
+import { getServerEnv } from './env.js';
+import { readHeader } from './headers.js';
 
 export interface GeoIntel {
   geoCountry: string | null;

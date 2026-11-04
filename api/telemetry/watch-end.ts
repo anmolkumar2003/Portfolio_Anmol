@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { applyCors } from '../_lib/cors';
-import { getServiceClient, requireAdminUserId } from '../_lib/supabase';
-import { parseJsonBody, watchPayloadSchema } from '../_lib/validate';
+import { applyCors } from '../_lib/cors.js';
+import { getServiceClient, requireAdminUserId } from '../_lib/supabase.js';
+import { parseJsonBody, watchPayloadSchema } from '../_lib/validate.js';
 
 export default async function handler(
   req: VercelRequest,
