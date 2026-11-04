@@ -41,10 +41,10 @@ export const experienceData: readonly Experience[] = [
     location: 'Mohali, Punjab',
     startDate: '2023-07',
     endDate: '2023-12',
-    currentTitle: 'Computer Science Training',
+    currentTitle: 'iOS Developer Training',
     roles: [
       {
-        title: 'Computer Science Training',
+        title: 'iOS Developer Training',
         startDate: '2023-07',
         endDate: '2023-12',
       },
