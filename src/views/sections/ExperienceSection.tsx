@@ -13,7 +13,7 @@ export function ExperienceSection() {
           id="experience-heading"
           kicker="Career"
           title="Experience"
-          copy="Where I’ve worked, and the iOS training that came before it."
+          copy="Roles and training in chronological order, newest first."
         />
         <div className={styles.timeline}>
           {entries.map((entry, index) => (

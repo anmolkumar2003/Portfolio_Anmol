@@ -1,20 +1,20 @@
 .timeline {
   position: relative;
   display: grid;
-  gap: var(--space-5);
+  gap: var(--space-4);
 }
 
 .timeline::before {
   content: '';
   position: absolute;
-  top: 0.4rem;
-  bottom: 0.4rem;
+  top: 0.55rem;
+  bottom: 0.55rem;
   left: 0.55rem;
   width: 1px;
   background: linear-gradient(
     180deg,
     rgba(34, 211, 238, 0.55) 0%,
-    var(--color-border) 42%,
+    var(--color-border) 48%,
     transparent 100%
   );
   transform-origin: top;
@@ -23,8 +23,8 @@
 
 .card {
   position: relative;
-  margin-left: 1.8rem;
-  padding: var(--space-6);
+  margin-left: 1.85rem;
+  padding: var(--space-5) var(--space-5) var(--space-5) var(--space-5);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   background: var(--color-charcoal);
@@ -35,7 +35,7 @@
 }
 
 .card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   border-color: var(--color-border-strong);
   box-shadow: var(--shadow-glow);
 }
@@ -43,10 +43,10 @@
 .card::before {
   content: '';
   position: absolute;
-  top: 1.35rem;
-  left: -1.42rem;
-  width: 0.7rem;
-  height: 0.7rem;
+  top: 1.45rem;
+  left: -1.45rem;
+  width: 0.65rem;
+  height: 0.65rem;
   border-radius: 50%;
   background: var(--color-cyan);
   box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.12);
@@ -55,7 +55,7 @@
 
 .training {
   border-style: dashed;
-  background: linear-gradient(180deg, rgba(34, 211, 238, 0.05), var(--color-charcoal) 42%);
+  background: linear-gradient(180deg, rgba(34, 211, 238, 0.04), var(--color-charcoal) 48%);
 }
 
 .training::before {
@@ -67,17 +67,18 @@
 .meta {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  align-items: center;
+  gap: var(--space-2);
   margin-bottom: var(--space-3);
 }
 
 .kind,
 .current {
-  padding: 0.2rem 0.55rem;
+  padding: 0.18rem 0.55rem;
   border-radius: 999px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
@@ -96,37 +97,50 @@
 }
 
 .organization {
-  margin-bottom: var(--space-2);
+  margin: 0 0 var(--space-2);
+  font-size: clamp(1.15rem, 2.4vw, 1.4rem);
   letter-spacing: -0.03em;
 }
 
 .role {
+  margin: 0;
   color: var(--color-text);
+  font-size: 1rem;
   font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
-.period,
+.period {
+  margin: var(--space-3) 0 0;
+  color: var(--color-cyan-muted);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
 .location {
-  margin-top: var(--space-2);
+  margin: var(--space-2) 0 0;
   color: var(--color-text-muted);
+  font-size: 0.9rem;
 }
 
 .progression {
   margin-top: var(--space-5);
-  padding-top: var(--space-5);
+  padding-top: var(--space-4);
   border-top: 1px solid var(--color-border);
 }
 
 .progressionLabel {
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-3);
   color: var(--color-cyan);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 700;
 }
 
 .roles {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-3);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -134,7 +148,7 @@
 
 .roles li {
   position: relative;
-  padding-left: 1.15rem;
+  padding-left: 1.1rem;
 }
 
 .roles li::before {
@@ -142,8 +156,8 @@
   position: absolute;
   top: 0.45rem;
   left: 0;
-  width: 0.45rem;
-  height: 0.45rem;
+  width: 0.4rem;
+  height: 0.4rem;
   border-radius: 50%;
   background: var(--color-accent);
 }
@@ -155,9 +169,9 @@
 
 .rolePeriod {
   display: block;
-  margin-top: 0.2rem;
+  margin-top: 0.15rem;
   color: var(--color-text-muted);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 
 @keyframes growLine {
@@ -179,6 +193,21 @@
   to {
     transform: scale(1);
     opacity: 1;
+  }
+}
+
+@media (max-width: 640px) {
+  .card {
+    margin-left: 1.55rem;
+    padding: var(--space-4);
+  }
+
+  .card::before {
+    left: -1.28rem;
+  }
+
+  .timeline::before {
+    left: 0.42rem;
   }
 }
 

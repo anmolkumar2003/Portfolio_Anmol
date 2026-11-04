@@ -1,24 +1,36 @@
 import type { Experience } from '@models';
 
+/** Newest first — internship and junior roles stay as separate entries. */
 export const experienceData: readonly Experience[] = [
   {
-    id: 'caplus-tech',
+    id: 'caplus-junior',
+    organization: 'CAPLUS TECH',
+    kind: 'employment',
+    location: 'Mohali, Punjab, India',
+    startDate: '2024-04',
+    endDate: null,
+    currentTitle: 'Junior iOS Developer',
+    roles: [
+      {
+        title: 'Junior iOS Developer',
+        startDate: '2024-04',
+        endDate: null,
+      },
+    ],
+  },
+  {
+    id: 'caplus-intern',
     organization: 'CAPLUS TECH',
     kind: 'employment',
     location: 'Mohali, Punjab, India',
     startDate: '2024-01',
-    endDate: null,
-    currentTitle: 'Jr. iOS Developer',
+    endDate: '2024-03',
+    currentTitle: 'iOS Developer Intern',
     roles: [
       {
-        title: 'iOS Intern',
+        title: 'iOS Developer Intern',
         startDate: '2024-01',
         endDate: '2024-03',
-      },
-      {
-        title: 'Jr. iOS Developer',
-        startDate: '2024-01',
-        endDate: null,
       },
     ],
   },
@@ -27,14 +39,14 @@ export const experienceData: readonly Experience[] = [
     organization: 'CS Soft Solutions',
     kind: 'training',
     location: 'Mohali, Punjab',
-    startDate: null,
-    endDate: null,
-    currentTitle: 'iOS Developer Trainee',
+    startDate: '2023-07',
+    endDate: '2023-12',
+    currentTitle: 'Computer Science Training',
     roles: [
       {
-        title: 'iOS Developer Trainee',
-        startDate: null,
-        endDate: null,
+        title: 'Computer Science Training',
+        startDate: '2023-07',
+        endDate: '2023-12',
       },
     ],
   },

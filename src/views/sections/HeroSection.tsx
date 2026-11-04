@@ -61,6 +61,9 @@ export function HeroSection() {
           initial={reduceMotion ? undefined : 'hidden'}
           animate={reduceMotion ? undefined : 'show'}
         >
+          <motion.p className={styles.identity} variants={reduceMotion ? undefined : item}>
+            {profile.name}
+          </motion.p>
           <motion.div className={styles.meta} variants={reduceMotion ? undefined : item}>
             <span className={styles.pill}>{profile.availability}</span>
             <span className={styles.pill}>
@@ -68,7 +71,7 @@ export function HeroSection() {
               {profile.location}
             </span>
           </motion.div>
-          <motion.p className="kicker" variants={reduceMotion ? undefined : item}>
+          <motion.p className={`kicker ${styles.roleKicker}`} variants={reduceMotion ? undefined : item}>
             {profile.shortRole}
           </motion.p>
           <motion.h1

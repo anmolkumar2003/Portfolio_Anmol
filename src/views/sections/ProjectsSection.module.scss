@@ -35,7 +35,7 @@
 
 .results {
   display: grid;
-  gap: var(--space-8);
+  gap: var(--space-6);
 }
 
 .showcase,
@@ -53,14 +53,14 @@
 
 .showcase:hover,
 .compactCard:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
   border-color: var(--color-border-strong);
-  box-shadow: var(--shadow-glow);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28), var(--shadow-glow);
 }
 
 .showcase {
   display: grid;
-  gap: var(--space-6);
+  gap: var(--space-5);
 }
 
 .visual {
@@ -76,8 +76,13 @@
 
 .details {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-3);
   min-width: 0;
+}
+
+.details h3 {
+  margin: 0;
+  letter-spacing: -0.03em;
 }
 
 .note {

@@ -1,13 +1,13 @@
 @use 'breakpoints' as *;
 
 .section {
-  padding: var(--space-12) 0;
-  scroll-margin-top: calc(var(--header-height) + 0.75rem);
+  padding: var(--space-10) 0;
+  scroll-margin-top: calc(var(--header-height) + 0.85rem);
   overflow-x: clip;
 }
 
 .container {
-  width: min(100% - 1.25rem, var(--content-max));
+  width: min(100% - 1.5rem, var(--content-max));
   margin-inline: auto;
 }
 
