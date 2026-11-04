@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getAllowedOrigins } from './env';
-import { readHeader } from './headers';
+import { getAllowedOrigins } from './env.js';
+import { readHeader } from './headers.js';
 
 function resolveAllowedOrigin(origin: string | undefined): string | null {
   if (!origin) {

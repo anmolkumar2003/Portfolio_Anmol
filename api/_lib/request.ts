@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { applyCors, rejectIfOriginBlocked } from './cors';
-import { getServerEnv } from './env';
-import { readHeader } from './headers';
-import { isRateLimited, pruneRateLimitBuckets } from './rate-limit';
+import { applyCors, rejectIfOriginBlocked } from './cors.js';
+import { getServerEnv } from './env.js';
+import { readHeader } from './headers.js';
+import { isRateLimited, pruneRateLimitBuckets } from './rate-limit.js';
 
 export function clientIp(req: VercelRequest): string {
   const forwarded = req.headers['x-forwarded-for'];
@@ -61,4 +61,4 @@ export function beginPublicPost(
   return true;
 }
 
-export { readHeader } from './headers';
+export { readHeader } from './headers.js';

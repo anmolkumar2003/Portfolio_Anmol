@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getServerEnv } from '../_lib/env';
-import { beginPublicPost } from '../_lib/request';
-import { getServiceClient } from '../_lib/supabase';
-import { heartbeatPayloadSchema, parseJsonBody } from '../_lib/validate';
+import { getServerEnv } from '../_lib/env.js';
+import { beginPublicPost } from '../_lib/request.js';
+import { getServiceClient } from '../_lib/supabase.js';
+import { heartbeatPayloadSchema, parseJsonBody } from '../_lib/validate.js';
 
 export default async function handler(
   req: VercelRequest,

@@ -1,10 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getServerEnv } from '../_lib/env';
-import { resolveGeoIntel } from '../_lib/geo';
-import { beginPublicPost, clientIp } from '../_lib/request';
-import { readStringField } from '../_lib/rows';
-import { getServiceClient } from '../_lib/supabase';
-import { parseJsonBody, sessionPayloadSchema } from '../_lib/validate';
+import { getServerEnv } from '../_lib/env.js';
+import { resolveGeoIntel } from '../_lib/geo.js';
+import { beginPublicPost, clientIp } from '../_lib/request.js';
+import { readStringField } from '../_lib/rows.js';
+import { getServiceClient } from '../_lib/supabase.js';
+import { parseJsonBody, sessionPayloadSchema } from '../_lib/validate.js';
 
 export default async function handler(
   req: VercelRequest,
