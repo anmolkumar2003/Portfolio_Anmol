@@ -6,3 +6,8 @@ export { useProfileViewModel } from './useProfileViewModel';
 export { useProjectsViewModel } from './useProjectsViewModel';
 export { useScrollViewModel } from './useScrollViewModel';
 export { useSkillsViewModel } from './useSkillsViewModel';
+export { useVisitorTelemetry } from './useVisitorTelemetry';
+export { useTelemetryAuth } from './useTelemetryAuth';
+export type { TelemetryAuthState } from './useTelemetryAuth';
+export { useTelemetryDashboard } from './useTelemetryDashboard';
+export type { TelemetryDashboardState } from './useTelemetryDashboard';

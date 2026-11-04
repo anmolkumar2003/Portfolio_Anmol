@@ -27,3 +27,15 @@ Place the PDF at `public/Anmol_Kumar_CV.pdf`. Configure the filename in `src/dat
 - Vercel: Framework Vite, output `dist`, build `npm run build` (see `vercel.json`)
 - GitHub Pages: `.github/workflows/deploy.yml` deploys this repository’s Pages, if enabled
 - `.github/workflows/deploy-public.yml` is **manual only** and can publish `dist/` to `anmolkumar2003/Portfolio` using `PORTFOLIO_DEPLOY_TOKEN`
+
+## Visitor telemetry (optional)
+
+Real-time visitor session monitoring for a private admin dashboard at `/admin/telemetry`.
+
+1. Create a Supabase project and apply `supabase/migrations/001_visitor_telemetry.sql`.
+2. Create an Auth user and insert them into `admin_allowlist`.
+3. Copy `.env.example` → set `VITE_SUPABASE_*`, `VITE_TELEMETRY_ENABLED=true`, and Vercel server secrets (`SUPABASE_SERVICE_ROLE_KEY`, etc.).
+4. Deploy on Vercel (serverless `/api/telemetry/*` is required; GitHub Pages cannot ingest events).
+5. Read privacy, retention, and IP handling notes in `docs/TELEMETRY_PRIVACY.md`.
+
+Local API testing: use `vercel dev` so `/api` routes resolve. The Vite-only `npm run dev` server will not execute serverless functions.
