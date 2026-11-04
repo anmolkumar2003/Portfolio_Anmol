@@ -18,3 +18,14 @@ export type { IProjectRepository } from './project.repository';
 
 export { skillRepository } from './skill.repository';
 export type { ISkillRepository } from './skill.repository';
+
+export {
+  getSupabaseBrowserClient,
+  isSupabaseConfigured,
+} from './supabase.client';
+
+export { telemetryRepository } from './telemetry.repository';
+export type { ITelemetryRepository } from './telemetry.repository';
+
+export { telemetryDashboardRepository } from './telemetry-dashboard.repository';
+export type { ITelemetryDashboardRepository } from './telemetry-dashboard.repository';

@@ -25,3 +25,16 @@ export type {
   ProjectPlatform,
 } from './project';
 export type { Skill, SkillCategory, SkillGroup } from './skill';
+export {
+  DEVICE_CATEGORIES,
+} from './telemetry';
+export type {
+  ClientTelemetryPayload,
+  DeviceCategory,
+  TelemetryClientEnvironment,
+  TelemetryEndPayload,
+  TelemetryHeartbeatPayload,
+  TelemetryStats,
+  TelemetryWatchPayload,
+  VisitorSessionRecord,
+} from './telemetry';

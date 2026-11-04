@@ -1,4 +1,4 @@
-import { useScrollViewModel } from '@viewmodels';
+import { useScrollViewModel, useVisitorTelemetry } from '@viewmodels';
 import { ScrollProgress } from '@views/components/ScrollProgress';
 import { SiteFooter } from '@views/components/SiteFooter';
 import { SiteHeader } from '@views/components/SiteHeader';
@@ -12,6 +12,7 @@ import { ProjectsSection } from '@views/sections/ProjectsSection';
 import { SkillsSection } from '@views/sections/SkillsSection';
 
 export function HomePage() {
+  useVisitorTelemetry();
   const { progress, isScrolled, activeSectionId } = useScrollViewModel();
 
   return (
