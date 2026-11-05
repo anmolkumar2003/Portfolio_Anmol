@@ -1,4 +1,17 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type FormEvent, type ReactNode } from 'react';
+import {
+  CalendarClock,
+  Clock,
+  Globe,
+  Laptop,
+  Map as MapIcon,
+  MapPin,
+  MonitorSmartphone,
+  Network,
+  RadioTower,
+  X,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { Button } from '@views/components/Button';
 import {
   useTelemetryAuth,
@@ -11,14 +24,16 @@ import {
 } from '@repositories';
 import styles from './TelemetryDashboardPage.module.scss';
 
+type FieldKind = 'ip' | 'location' | 'network' | 'default';
+
 function formatTimestamp(value: string | null | undefined): string {
   if (!value) {
-    return '—';
+    return 'Unavailable';
   }
 
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) {
-    return '—';
+    return 'Unavailable';
   }
 
   return new Intl.DateTimeFormat(undefined, {
@@ -27,90 +42,194 @@ function formatTimestamp(value: string | null | undefined): string {
   }).format(date);
 }
 
-function locationLabel(session: VisitorSessionRecord): string {
-  const parts = [
-    session.geo_city,
-    session.geo_region,
-    session.geo_country,
-  ].filter(Boolean);
+function displayField(
+  value: string | null | undefined,
+  kind: FieldKind,
+  isActive: boolean,
+): string {
+  const trimmed = value?.trim();
+  if (trimmed) {
+    return trimmed;
+  }
 
-  return parts.length > 0 ? parts.join(', ') : '—';
+  if (isActive) {
+    if (kind === 'ip' || kind === 'network') {
+      return 'Pending...';
+    }
+    if (kind === 'location') {
+      return 'Resolving...';
+    }
+  }
+
+  return 'Unavailable';
+}
+
+function locationSummary(session: VisitorSessionRecord): string {
+  const city = session.geo_city?.trim();
+  const country = session.geo_country?.trim();
+  if (city && country) {
+    return `${city}, ${country}`;
+  }
+  if (city || country) {
+    return city || country || 'Unavailable';
+  }
+  return displayField(null, 'location', session.is_active);
+}
+
+function deviceLabel(session: VisitorSessionRecord): string {
+  const category = session.device_category?.trim();
+  if (category && category !== 'unknown') {
+    return category.charAt(0).toUpperCase() + category.slice(1);
+  }
+  return 'Unknown device';
+}
+
+function DetailRow({
+  icon: Icon,
+  label,
+  value,
+  pending = false,
+}: {
+  icon: LucideIcon;
+  label: string;
+  value: string;
+  pending?: boolean;
+}) {
+  return (
+    <div className={styles.detailItem}>
+      <span className={styles.detailLabel}>
+        <Icon size={14} aria-hidden="true" className={styles.detailIcon} />
+        {label}
+      </span>
+      <span
+        className={`${styles.detailValue} ${pending ? styles.detailValuePending : ''}`}
+      >
+        {value}
+      </span>
+    </div>
+  );
 }
 
 function SessionDetails({ session }: { session: VisitorSessionRecord }) {
+  const isActive = session.is_active;
+  const ip = displayField(session.ip_address, 'ip', isActive);
+  const city = displayField(session.geo_city, 'location', isActive);
+  const region = displayField(session.geo_region, 'location', isActive);
+  const country = displayField(session.geo_country, 'location', isActive);
+  const location = displayField(
+    [session.geo_city, session.geo_region, session.geo_country]
+      .filter(Boolean)
+      .join(', ') || null,
+    'location',
+    isActive,
+  );
+  const network = displayField(
+    session.isp_name || session.network_org,
+    'network',
+    isActive,
+  );
+  const browser = displayField(
+    [session.browser_name, session.browser_engine].filter(Boolean).join(' / ') ||
+      null,
+    'default',
+    isActive,
+  );
+  const device = displayField(
+    session.device_category && session.device_category !== 'unknown'
+      ? session.device_category
+      : null,
+    'default',
+    isActive,
+  );
+  const os = displayField(session.os_name, 'default', isActive);
+  const screen =
+    session.screen_width && session.screen_height
+      ? `${session.screen_width}×${session.screen_height}`
+      : 'Unavailable';
+  const timezone = displayField(session.timezone, 'default', isActive);
+  const sessionTime = formatTimestamp(session.started_at);
+
+  const isPending = (value: string) =>
+    value === 'Pending...' || value === 'Resolving...';
+
   return (
     <div className={styles.detailGrid}>
-      <div className={styles.detailItem}>
-        <span className={styles.detailLabel}>Status</span>
-        <span className={styles.detailValue}>
-          {session.is_active ? 'Active' : 'Inactive'}
-        </span>
-      </div>
-      <div className={styles.detailItem}>
-        <span className={styles.detailLabel}>Session start</span>
-        <span className={styles.detailValue}>
-          {formatTimestamp(session.started_at)}
-        </span>
-      </div>
-      <div className={styles.detailItem}>
-        <span className={styles.detailLabel}>Last active</span>
-        <span className={styles.detailValue}>
-          {formatTimestamp(session.last_active_at)}
-        </span>
-      </div>
-      <div className={styles.detailItem}>
-        <span className={styles.detailLabel}>IP address</span>
-        <span className={styles.detailValue}>{session.ip_address ?? '—'}</span>
-      </div>
-      <div className={styles.detailItem}>
-        <span className={styles.detailLabel}>Location</span>
-        <span className={styles.detailValue}>{locationLabel(session)}</span>
-      </div>
-      <div className={styles.detailItem}>
-        <span className={styles.detailLabel}>Postal code</span>
-        <span className={styles.detailValue}>
-          {session.geo_postal_code ?? '—'}
-        </span>
-      </div>
-      <div className={styles.detailItem}>
-        <span className={styles.detailLabel}>Browser</span>
-        <span className={styles.detailValue}>
-          {[session.browser_name, session.browser_engine]
-            .filter(Boolean)
-            .join(' / ') || '—'}
-        </span>
-      </div>
-      <div className={styles.detailItem}>
-        <span className={styles.detailLabel}>Device / OS</span>
-        <span className={styles.detailValue}>
-          {[session.device_category, session.os_name]
-            .filter(Boolean)
-            .join(' · ') || '—'}
-        </span>
-      </div>
-      <div className={styles.detailItem}>
-        <span className={styles.detailLabel}>Screen</span>
-        <span className={styles.detailValue}>
-          {session.screen_width && session.screen_height
-            ? `${session.screen_width}×${session.screen_height}`
-            : '—'}
-        </span>
-      </div>
-      <div className={styles.detailItem}>
-        <span className={styles.detailLabel}>Timezone</span>
-        <span className={styles.detailValue}>{session.timezone ?? '—'}</span>
-      </div>
-      <div className={styles.detailItem}>
-        <span className={styles.detailLabel}>Network / ISP</span>
-        <span className={styles.detailValue}>
-          {session.isp_name || session.network_org || '—'}
-        </span>
-      </div>
-      <div className={styles.detailItem}>
-        <span className={styles.detailLabel}>Visitor key (approx.)</span>
-        <span className={styles.detailValue}>{session.visitor_id}</span>
-      </div>
+      <DetailRow
+        icon={Network}
+        label="IP Address"
+        value={ip}
+        pending={isPending(ip)}
+      />
+      <DetailRow
+        icon={MapPin}
+        label="Location"
+        value={location}
+        pending={isPending(location)}
+      />
+      <DetailRow
+        icon={MapIcon}
+        label="City"
+        value={city}
+        pending={isPending(city)}
+      />
+      <DetailRow
+        icon={MapIcon}
+        label="State / Region"
+        value={region}
+        pending={isPending(region)}
+      />
+      <DetailRow
+        icon={MapPin}
+        label="Country"
+        value={country}
+        pending={isPending(country)}
+      />
+      <DetailRow
+        icon={RadioTower}
+        label="Network Provider / ISP"
+        value={network}
+        pending={isPending(network)}
+      />
+      <DetailRow icon={Globe} label="Browser" value={browser} />
+      <DetailRow icon={MonitorSmartphone} label="Device" value={device} />
+      <DetailRow icon={Laptop} label="Operating System" value={os} />
+      <DetailRow icon={MonitorSmartphone} label="Screen Resolution" value={screen} />
+      <DetailRow icon={Clock} label="Timezone" value={timezone} />
+      <DetailRow
+        icon={CalendarClock}
+        label="Session Timestamp"
+        value={sessionTime}
+      />
     </div>
+  );
+}
+
+function VisitorCard({
+  session,
+  visitorNumber,
+  selected,
+  onSelect,
+}: {
+  session: VisitorSessionRecord;
+  visitorNumber: number;
+  selected: boolean;
+  onSelect: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      className={`${styles.row} ${selected ? styles.rowActive : ''}`}
+      onClick={onSelect}
+    >
+      <div className={styles.rowTop}>
+        <strong className={styles.rowTitle}>
+          <MapPin size={14} aria-hidden="true" className={styles.rowPin} />
+          Visitor {visitorNumber}
+        </strong>
+        <span className={styles.deviceChip}>{deviceLabel(session)}</span>
+      </div>
+      <span className={styles.meta}>{locationSummary(session)}</span>
+    </button>
   );
 }
 
@@ -140,8 +259,7 @@ function IpVerificationPanel({ accessToken }: { accessToken: string }) {
       <h2 className={styles.sectionTitle}>IP verification</h2>
       <p className={styles.note}>
         Compares the server-detected request IP (Vercel headers) with your
-        current public IP. Visible only in this admin session — never on the
-        public Live widget.
+        current public IP. Admin session only.
       </p>
       <Button
         type="button"
@@ -155,36 +273,40 @@ function IpVerificationPanel({ accessToken }: { accessToken: string }) {
       {error ? <p className={styles.error}>{error}</p> : null}
       {result ? (
         <div className={styles.detailGrid}>
-          <div className={styles.detailItem}>
-            <span className={styles.detailLabel}>Server-detected IP</span>
-            <span className={styles.detailValue}>{result.serverDetectedIp}</span>
-          </div>
-          <div className={styles.detailItem}>
-            <span className={styles.detailLabel}>Your public IP (this browser)</span>
-            <span className={styles.detailValue}>
-              {result.clientPublicIpFailed
-                ? 'blocked / n/a'
-                : (result.clientPublicIp ?? '—')}
-            </span>
-          </div>
-          <div className={styles.detailItem}>
-            <span className={styles.detailLabel}>Match</span>
-            <span className={styles.detailValue}>
-              {result.matches === null
+          <DetailRow
+            icon={Network}
+            label="Server-detected IP"
+            value={result.serverDetectedIp}
+          />
+          <DetailRow
+            icon={Globe}
+            label="Your public IP (this browser)"
+            value={
+              result.clientPublicIpFailed
+                ? 'Unavailable'
+                : (result.clientPublicIp ?? 'Unavailable')
+            }
+          />
+          <DetailRow
+            icon={MapPin}
+            label="Match"
+            value={
+              result.matches === null
                 ? 'inconclusive'
                 : result.matches
                   ? 'yes'
-                  : 'no'}
-            </span>
-          </div>
-          <div className={styles.detailItem}>
-            <span className={styles.detailLabel}>Vercel geo</span>
-            <span className={styles.detailValue}>
-              {[result.vercelGeo.city, result.vercelGeo.region, result.vercelGeo.country]
+                  : 'no'
+            }
+          />
+          <DetailRow
+            icon={MapIcon}
+            label="Vercel geo"
+            value={
+              [result.vercelGeo.city, result.vercelGeo.region, result.vercelGeo.country]
                 .filter(Boolean)
-                .join(', ') || '—'}
-            </span>
-          </div>
+                .join(', ') || 'Unavailable'
+            }
+          />
         </div>
       ) : null}
     </section>
@@ -249,10 +371,25 @@ function LoginPanel({
         </Button>
       </form>
       <p className={styles.note}>
-        Access is limited to allowlisted administrators. IP addresses are shown
-        only in this authenticated view.
+        Access is limited to allowlisted administrators. IP and network details
+        appear only in this authenticated view.
       </p>
     </div>
+  );
+}
+
+function PanelShell({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactNode;
+}) {
+  return (
+    <section className={styles.panel}>
+      <h2 className={styles.sectionTitle}>{title}</h2>
+      {children}
+    </section>
   );
 }
 
@@ -268,16 +405,24 @@ export function TelemetryDashboardPage() {
     (session) => !session.is_active,
   );
 
+  const visitorNumberById = new Map<string, number>();
+  [...activeSessions, ...inactiveSessions].forEach((session, index) => {
+    visitorNumberById.set(session.id, index + 1);
+  });
+
   return (
     <main className={styles.page}>
       <div className={styles.shell}>
         <header className={styles.header}>
           <div>
-            <p className={styles.kicker}>Private</p>
+            <p className={styles.kicker}>
+              <MapPin size={12} aria-hidden="true" />
+              Private
+            </p>
             <h1 className={styles.title}>Visitor telemetry</h1>
             <p className={styles.subtitle}>
-              Real-time session monitoring for this portfolio. Counts reflect
-              stored sessions only — never sample or fabricated data.
+              Location, IP, and network details for portfolio visitors. Values
+              come from stored sessions only — never fabricated.
             </p>
           </div>
           <div className={styles.headerActions}>
@@ -292,18 +437,24 @@ export function TelemetryDashboardPage() {
                 </Button>
               </>
             ) : null}
+            <Button
+              href={import.meta.env.BASE_URL}
+              variant="ghost"
+              ariaLabel="Close telemetry"
+            >
+              <X size={16} aria-hidden="true" />
+            </Button>
           </div>
         </header>
 
         {!auth.configured ? (
-          <section className={styles.panel}>
-            <h2 className={styles.sectionTitle}>Configuration required</h2>
+          <PanelShell title="Configuration required">
             <p className={styles.empty}>
               Set <code>VITE_SUPABASE_URL</code> and{' '}
               <code>VITE_SUPABASE_ANON_KEY</code>, apply the SQL migration, and
-              configure Vercel server secrets before monitoring visitors.
+              configure Vercel server secrets before viewing visitor details.
             </p>
-          </section>
+          </PanelShell>
         ) : null}
 
         {auth.configured && auth.loading ? (
@@ -317,13 +468,12 @@ export function TelemetryDashboardPage() {
         ) : null}
 
         {auth.configured && auth.session && !auth.isAdmin ? (
-          <section className={styles.panel}>
-            <h2 className={styles.sectionTitle}>Not authorized</h2>
+          <PanelShell title="Not authorized">
             <p className={styles.empty}>
               Your account is signed in but is not on the telemetry admin
               allowlist.
             </p>
-          </section>
+          </PanelShell>
         ) : null}
 
         {auth.configured && auth.session && auth.isAdmin ? (
@@ -331,126 +481,91 @@ export function TelemetryDashboardPage() {
             {auth.session.access_token ? (
               <IpVerificationPanel accessToken={auth.session.access_token} />
             ) : null}
-            <section className={`${styles.panel} ${styles.stats}`} aria-label="Telemetry status">
+            <section
+              className={`${styles.panel} ${styles.stats}`}
+              aria-label="Telemetry status"
+            >
               <div className={styles.stat}>
-                <span className={styles.statLabel}>Tracking active since</span>
+                <span className={styles.statLabel}>Tracking since</span>
                 <span className={styles.statValue}>
                   {formatTimestamp(dashboard.stats.trackingStartedAt)}
                 </span>
               </div>
               <div className={styles.stat}>
-                <span className={styles.statLabel}>Active sessions</span>
-                <span className={styles.statValue}>
-                  {dashboard.stats.activeSessions}
-                </span>
-              </div>
-              <div className={styles.stat}>
-                <span className={styles.statLabel}>Total visits</span>
+                <span className={styles.statLabel}>Visitor sessions</span>
                 <span className={styles.statValue}>
                   {dashboard.stats.totalVisits}
                 </span>
               </div>
               <div className={styles.stat}>
-                <span className={styles.statLabel}>Approx. unique visitors</span>
+                <span className={styles.statLabel}>Unique devices</span>
                 <span className={styles.statValue}>
                   {dashboard.stats.approximateUniqueVisitors}
                 </span>
               </div>
               <div className={styles.stat}>
-                <span className={styles.statLabel}>Active watchers</span>
+                <span className={styles.statLabel}>Current sessions</span>
                 <span className={styles.statValue}>
-                  {dashboard.stats.activeWatchers}
+                  {dashboard.stats.activeSessions}
                 </span>
               </div>
             </section>
 
             <div className={styles.layout}>
               <section className={styles.panel}>
-                <h2 className={styles.sectionTitle}>Active sessions</h2>
+                <h2 className={styles.sectionTitle}>Current visitors</h2>
                 {dashboard.loading ? (
                   <p className={styles.empty}>Loading sessions…</p>
                 ) : activeSessions.length === 0 ? (
-                  <p className={styles.empty}>No active sessions right now.</p>
+                  <p className={styles.empty}>No current visitor sessions.</p>
                 ) : (
                   <div className={styles.list}>
                     {activeSessions.map((session) => (
-                      <button
+                      <VisitorCard
                         key={session.id}
-                        type="button"
-                        className={`${styles.row} ${
-                          dashboard.selectedSessionId === session.id
-                            ? styles.rowActive
-                            : ''
-                        }`}
-                        onClick={() => dashboard.selectSession(session.id)}
-                      >
-                        <div className={styles.rowTop}>
-                          <strong>
-                            {session.browser_name ?? 'Unknown browser'} ·{' '}
-                            {session.os_name ?? 'Unknown OS'}
-                          </strong>
-                          <span
-                            className={`${styles.status} ${styles.statusActive}`}
-                          >
-                            Live
-                          </span>
-                        </div>
-                        <span className={styles.meta}>
-                          {locationLabel(session)} · last active{' '}
-                          {formatTimestamp(session.last_active_at)}
-                        </span>
-                      </button>
+                        session={session}
+                        visitorNumber={visitorNumberById.get(session.id) ?? 0}
+                        selected={dashboard.selectedSessionId === session.id}
+                        onSelect={() => dashboard.selectSession(session.id)}
+                      />
                     ))}
                   </div>
                 )}
 
-                <h2 className={styles.sectionTitle} style={{ marginTop: '1.5rem' }}>
-                  Recorded sessions
+                <h2
+                  className={styles.sectionTitle}
+                  style={{ marginTop: '1.5rem' }}
+                >
+                  Recent visitors
                 </h2>
                 {inactiveSessions.length === 0 ? (
-                  <p className={styles.empty}>No recorded inactive sessions yet.</p>
+                  <p className={styles.empty}>No recorded sessions yet.</p>
                 ) : (
                   <div className={styles.list}>
                     {inactiveSessions.map((session) => (
-                      <button
+                      <VisitorCard
                         key={session.id}
-                        type="button"
-                        className={`${styles.row} ${
-                          dashboard.selectedSessionId === session.id
-                            ? styles.rowActive
-                            : ''
-                        }`}
-                        onClick={() => dashboard.selectSession(session.id)}
-                      >
-                        <div className={styles.rowTop}>
-                          <strong>
-                            {session.browser_name ?? 'Unknown browser'} ·{' '}
-                            {session.os_name ?? 'Unknown OS'}
-                          </strong>
-                          <span
-                            className={`${styles.status} ${styles.statusInactive}`}
-                          >
-                            Inactive
-                          </span>
-                        </div>
-                        <span className={styles.meta}>
-                          {locationLabel(session)} · started{' '}
-                          {formatTimestamp(session.started_at)}
-                        </span>
-                      </button>
+                        session={session}
+                        visitorNumber={visitorNumberById.get(session.id) ?? 0}
+                        selected={dashboard.selectedSessionId === session.id}
+                        onSelect={() => dashboard.selectSession(session.id)}
+                      />
                     ))}
                   </div>
                 )}
               </section>
 
               <section className={styles.panel}>
-                <h2 className={styles.sectionTitle}>Session detail</h2>
+                <h2 className={styles.sectionTitle}>
+                  <MapPin size={16} aria-hidden="true" className={styles.titlePin} />
+                  Visitor details
+                </h2>
                 {dashboard.selectedSession ? (
                   <SessionDetails session={dashboard.selectedSession} />
                 ) : (
                   <p className={styles.empty}>
-                    Select a session to inspect IP, location, device, and timing
-                    details.
+                    Select a visitor to inspect IP, location, network, and
+                    device details.
                   </p>
                 )}
               </section>

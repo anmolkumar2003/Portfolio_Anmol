@@ -23,6 +23,9 @@
 }
 
 .kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   color: var(--color-cyan);
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -100,9 +103,17 @@
 }
 
 .sectionTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-family: var(--font-display);
   font-size: 1.15rem;
   margin: 0 0 var(--space-4);
+}
+
+.titlePin {
+  color: var(--color-cyan);
+  flex-shrink: 0;
 }
 
 .list {
@@ -139,18 +150,22 @@
   align-items: center;
 }
 
-.status {
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.rowTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
-.statusActive {
-  color: #4ade80;
+.rowPin {
+  color: var(--color-cyan);
+  flex-shrink: 0;
 }
 
-.statusInactive {
+.deviceChip {
   color: var(--color-text-subtle);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: capitalize;
 }
 
 .meta {
@@ -169,16 +184,30 @@
 }
 
 .detailLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   color: var(--color-text-subtle);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
+.detailIcon {
+  color: var(--color-cyan);
+  flex-shrink: 0;
+}
+
 .detailValue {
   color: var(--color-text);
   font-size: 0.95rem;
   word-break: break-word;
+}
+
+.detailValuePending {
+  color: var(--color-cyan);
+  font-style: italic;
+  opacity: 0.85;
 }
 
 .empty {
