@@ -4,6 +4,7 @@ import type {
   AnalyticsMetric,
   PageAnalyticsTotals,
 } from '@models';
+import { resolveSupabaseUrl } from '../../shared/supabase-url';
 import { getSupabaseBrowserClient, isSupabaseConfigured } from './supabase.client';
 import { getOrCreateVisitorKey } from './telemetry.ids';
 
@@ -69,7 +70,7 @@ function classifyPostgrestError(
 }
 
 function configuredHost(): string | null {
-  const url = import.meta.env.VITE_SUPABASE_URL?.trim();
+  const url = resolveSupabaseUrl(import.meta.env.VITE_SUPABASE_URL);
   if (!url) {
     return null;
   }

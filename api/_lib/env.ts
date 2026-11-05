@@ -1,3 +1,5 @@
+import { resolveSupabaseUrl } from '../../shared/supabase-url.js';
+
 function required(name: string): string {
   const value = process.env[name]?.trim();
   if (!value) {
@@ -50,7 +52,7 @@ export function getAllowedOrigins(): string[] {
 
 export function getServerEnv() {
   return {
-    supabaseUrl: required('SUPABASE_URL'),
+    supabaseUrl: resolveSupabaseUrl(required('SUPABASE_URL')),
     supabaseServiceRoleKey: required('SUPABASE_SERVICE_ROLE_KEY'),
     inactiveMs: Number(process.env.TELEMETRY_INACTIVE_MS ?? '300000'),
     rateLimitPerMin: Number(process.env.TELEMETRY_RATE_LIMIT_PER_MIN ?? '60'),

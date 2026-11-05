@@ -24,6 +24,8 @@ VITE_SUPABASE_ANON_KEY=...
 
 Vite bakes `VITE_*` into the production bundle at **build time**. A one-character typo in `VITE_SUPABASE_URL` on Vercel will make the Live HUD show unavailable counters with a connection error.
 
+The app also corrects a known historical typo (`dqbikcikjrr…` → `dqbikcikirr…`) at runtime — still fix the Vercel env to the correct host so future builds stay clean.
+
 Also set server secrets for session ingest + `/api/telemetry/public-stats`:
 
 ```bash

@@ -1,11 +1,18 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { resolveSupabaseUrl } from '../../shared/supabase-url';
 
 let browserClient: SupabaseClient | null = null;
 
+function supabaseUrl(): string {
+  return resolveSupabaseUrl(import.meta.env.VITE_SUPABASE_URL);
+}
+
+function supabaseAnonKey(): string {
+  return import.meta.env.VITE_SUPABASE_ANON_KEY?.trim() ?? '';
+}
+
 export function isSupabaseConfigured(): boolean {
-  const url = import.meta.env.VITE_SUPABASE_URL?.trim();
-  const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
-  return Boolean(url && anonKey);
+  return Boolean(supabaseUrl() && supabaseAnonKey());
 }
 
 export function getSupabaseBrowserClient(): SupabaseClient | null {
@@ -17,17 +24,13 @@ export function getSupabaseBrowserClient(): SupabaseClient | null {
     return browserClient;
   }
 
-  browserClient = createClient(
-    import.meta.env.VITE_SUPABASE_URL!.trim(),
-    import.meta.env.VITE_SUPABASE_ANON_KEY!.trim(),
-    {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-      },
+  browserClient = createClient(supabaseUrl(), supabaseAnonKey(), {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
     },
-  );
+  });
 
   return browserClient;
 }
