@@ -1,0 +1,420 @@
+$bg: #0a0e17;
+$cyan: #00f3ff;
+$neon: #39ff14;
+
+.root {
+  position: fixed;
+  right: max(0.85rem, env(safe-area-inset-right));
+  bottom: max(0.85rem, env(safe-area-inset-bottom));
+  z-index: 55;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.65rem;
+  width: min(34rem, calc(100vw - 1.25rem));
+  pointer-events: none;
+}
+
+.hudShell {
+  width: 100%;
+  pointer-events: auto;
+}
+
+.liveToggle {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.55rem;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid rgba($cyan, 0.45);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(10, 18, 32, 0.95), rgba(6, 12, 24, 0.98));
+  color: $cyan;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow:
+    0 0 0 1px rgba($cyan, 0.08),
+    0 10px 28px rgba(0, 0, 0, 0.4),
+    0 0 18px rgba($cyan, 0.18);
+  transition:
+    border-color 180ms ease,
+    color 180ms ease,
+    background-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.liveToggle:hover,
+.liveToggle:focus-visible {
+  border-color: rgba($neon, 0.55);
+  color: $neon;
+  box-shadow:
+    0 0 0 1px rgba($neon, 0.12),
+    0 10px 28px rgba(0, 0, 0, 0.45),
+    0 0 20px rgba($neon, 0.2);
+  outline: none;
+}
+
+.liveToggle[data-active='true'] {
+  border-color: rgba($neon, 0.55);
+  color: $neon;
+  background: rgba($neon, 0.08);
+}
+
+.liveTogglePulse {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: $neon;
+  box-shadow: 0 0 10px rgba($neon, 0.9);
+  animation: blink 1.15s ease-in-out infinite;
+}
+
+.headerActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+}
+
+.closeButton {
+  display: inline-grid;
+  place-items: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border: 1px solid rgba($cyan, 0.28);
+  border-radius: 0.45rem;
+  background: rgba(2, 8, 18, 0.65);
+  color: #94a3b8;
+  cursor: pointer;
+  transition: color 160ms ease, border-color 160ms ease, background-color 160ms ease;
+}
+
+.closeButton:hover,
+.closeButton:focus-visible {
+  color: $cyan;
+  border-color: rgba($cyan, 0.55);
+  outline: none;
+}
+
+.hud {
+  pointer-events: auto;
+  padding: 0.85rem;
+  border: 1px solid rgba($cyan, 0.35);
+  border-radius: 1rem;
+  background:
+    linear-gradient(155deg, rgba(10, 14, 23, 0.88), rgba(6, 10, 20, 0.94)),
+    rgba($bg, 0.82);
+  backdrop-filter: blur(18px) saturate(1.25);
+  -webkit-backdrop-filter: blur(18px) saturate(1.25);
+  box-shadow:
+    0 0 0 1px rgba($cyan, 0.08),
+    0 16px 48px rgba(0, 0, 0, 0.5),
+    0 0 32px rgba($cyan, 0.12);
+  color: #dbeafe;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid rgba($cyan, 0.18);
+}
+
+.kicker {
+  margin: 0 0 0.2rem;
+  color: rgba($cyan, 0.75);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  color: $cyan;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-shadow: 0 0 14px rgba($cyan, 0.35);
+}
+
+.livePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba($neon, 0.4);
+  background: rgba($neon, 0.06);
+  color: $neon;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 10px rgba($neon, 0.45);
+}
+
+.pulse {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: $neon;
+  box-shadow: 0 0 10px rgba($neon, 0.95);
+  animation: blink 1.15s ease-in-out infinite;
+}
+
+.panels {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.avatarPanel,
+.diagnosticsPanel {
+  min-width: 0;
+  border: 1px solid rgba($cyan, 0.22);
+  border-radius: 0.85rem;
+  background: rgba(8, 12, 22, 0.55);
+  box-shadow: inset 0 0 24px rgba($cyan, 0.04);
+}
+
+.avatarPanel {
+  padding: 0.7rem 0.55rem 0.55rem;
+}
+
+.diagnosticsPanel {
+  padding: 0.75rem 0.8rem 0.7rem;
+}
+
+.avatarStage {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+}
+
+.avatarPerspective {
+  perspective: 1000px;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  padding: 0.35rem 0 0.15rem;
+}
+
+.avatarSpin {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.robotSvg {
+  width: min(7.5rem, 42vw);
+  height: auto;
+  display: block;
+}
+
+.pedestal {
+  position: relative;
+  width: 6.5rem;
+  height: 2.1rem;
+  margin-top: -0.15rem;
+}
+
+.pedestalRing,
+.pedestalRingDelayed {
+  position: absolute;
+  left: 50%;
+  top: 35%;
+  width: 5.4rem;
+  height: 1.15rem;
+  border: 1.5px solid rgba($cyan, 0.65);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 0 12px rgba($cyan, 0.45),
+    inset 0 0 8px rgba($cyan, 0.2);
+  animation: pedestalPulse 2.4s ease-in-out infinite;
+}
+
+.pedestalRingDelayed {
+  width: 4.1rem;
+  height: 0.85rem;
+  border-color: rgba($neon, 0.35);
+  animation-delay: 0.55s;
+  box-shadow: 0 0 10px rgba($neon, 0.25);
+}
+
+.radarGrid {
+  position: absolute;
+  left: 50%;
+  top: 35%;
+  width: 5.8rem;
+  height: 1.35rem;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background:
+    repeating-radial-gradient(
+      ellipse at center,
+      transparent 0 5px,
+      rgba($cyan, 0.12) 5px 6px
+    );
+  opacity: 0.7;
+  animation: radarSweep 3.2s linear infinite;
+  pointer-events: none;
+}
+
+.avatarCaption {
+  margin: 0.15rem 0 0;
+  color: rgba($cyan, 0.7);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem 0.7rem;
+}
+
+.metric {
+  min-width: 0;
+}
+
+.metricLabel {
+  display: block;
+  margin-bottom: 0.12rem;
+  color: #64748b;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.metricValue {
+  display: block;
+  overflow: hidden;
+  color: #e2e8f0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metricValueAccent {
+  color: $cyan;
+  text-shadow: 0 0 10px rgba($cyan, 0.35);
+}
+
+.metricValueWarn {
+  color: #fdba74;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.footer {
+  margin: 0.7rem 0 0;
+  padding-top: 0.55rem;
+  border-top: 1px solid rgba($cyan, 0.12);
+  color: #64748b;
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+}
+
+.error {
+  margin: 0.4rem 0 0;
+  color: #fca5a5;
+  font-size: 0.62rem;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes pedestalPulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    filter: brightness(0.9);
+  }
+
+  50% {
+    opacity: 1;
+    filter: brightness(1.25);
+  }
+}
+
+@keyframes radarSweep {
+  from {
+    opacity: 0.35;
+    transform: translate(-50%, -50%) scale(0.92);
+  }
+
+  to {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+}
+
+@media (min-width: 720px) {
+  .root {
+    width: min(38rem, calc(100vw - 1.5rem));
+  }
+
+  .panels {
+    grid-template-columns: minmax(9.5rem, 0.9fr) minmax(0, 1.35fr);
+    align-items: stretch;
+  }
+
+  .avatarPanel {
+    display: grid;
+    align-content: center;
+  }
+
+  .metricsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 719px) {
+  .root {
+    width: min(22rem, calc(100vw - 1.1rem));
+  }
+
+  .robotSvg {
+    width: min(6.4rem, 46vw);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse,
+  .liveTogglePulse,
+  .pedestalRing,
+  .pedestalRingDelayed,
+  .radarGrid {
+    animation: none;
+  }
+
+  .liveToggle:hover {
+    transform: none;
+  }
+}

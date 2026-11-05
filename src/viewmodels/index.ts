@@ -11,3 +11,5 @@ export { useTelemetryAuth } from './useTelemetryAuth';
 export type { TelemetryAuthState } from './useTelemetryAuth';
 export { useTelemetryDashboard } from './useTelemetryDashboard';
 export type { TelemetryDashboardState } from './useTelemetryDashboard';
+export { useLiveMetrics } from './useLiveMetrics';
+export type { LiveMetricsController } from './useLiveMetrics';

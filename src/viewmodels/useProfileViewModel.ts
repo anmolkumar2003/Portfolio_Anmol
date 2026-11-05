@@ -1,7 +1,12 @@
 import { useCallback, useMemo } from 'react';
 import { resumeFileName } from '@data';
 import { analyticsEvents } from '@models';
-import { analyticsRepository, profileRepository, type IProfileRepository } from '@repositories';
+import {
+  analyticsRepository,
+  pageAnalyticsRepository,
+  profileRepository,
+  type IProfileRepository,
+} from '@repositories';
 
 export function useProfileViewModel(
   repository: IProfileRepository = profileRepository,
@@ -14,6 +19,7 @@ export function useProfileViewModel(
 
   const trackResumeDownloadClick = useCallback(() => {
     analyticsRepository.track(analyticsEvents.resumeDownloadClick);
+    void pageAnalyticsRepository.increment('downloads');
   }, []);
 
   return {

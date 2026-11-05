@@ -1,4 +1,5 @@
 import { useScrollViewModel, useVisitorTelemetry } from '@viewmodels';
+import { LiveMetricsTracker } from '@views/components/LiveMetricsTracker';
 import { ScrollProgress } from '@views/components/ScrollProgress';
 import { SiteFooter } from '@views/components/SiteFooter';
 import { SiteHeader } from '@views/components/SiteHeader';
@@ -30,6 +31,7 @@ export function HomePage() {
         <ContactSection />
       </main>
       <SiteFooter />
+      <LiveMetricsTracker />
     </>
   );
 }

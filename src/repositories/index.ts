@@ -29,3 +29,14 @@ export type { ITelemetryRepository } from './telemetry.repository';
 
 export { telemetryDashboardRepository } from './telemetry-dashboard.repository';
 export type { ITelemetryDashboardRepository } from './telemetry-dashboard.repository';
+
+export {
+  getEmptyPageAnalyticsTotals,
+  pageAnalyticsRepository,
+} from './page-analytics.repository';
+export type {
+  IPageAnalyticsRepository,
+  PresenceTrackPayload,
+} from './page-analytics.repository';
+
+export { collectVisitorSystemTelemetry } from './visitor-system.telemetry';

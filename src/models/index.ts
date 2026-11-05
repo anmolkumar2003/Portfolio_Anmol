@@ -38,3 +38,9 @@ export type {
   TelemetryWatchPayload,
   VisitorSessionRecord,
 } from './telemetry';
+export type {
+  AnalyticsMetric,
+  LiveMetricsState,
+  PageAnalyticsTotals,
+  VisitorSystemTelemetry,
+} from './page-analytics';
