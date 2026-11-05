@@ -41,6 +41,8 @@ Before enabling telemetry in production:
 - The browser receives only the Supabase **anon** key.
 - Dashboard reads require an authenticated user listed in `admin_allowlist`.
 - Row Level Security denies anonymous table access.
+- The public Live widget and `/api/telemetry/public-stats` return **aggregates only** (no IPs, session IDs, or visitor rows).
+- Admin IP verification (`/api/telemetry/whoami`) is allowlisted-auth only.
 
 ## Retention and deletion
 

@@ -25,7 +25,10 @@ export {
 } from './supabase.client';
 
 export { telemetryRepository } from './telemetry.repository';
-export type { ITelemetryRepository } from './telemetry.repository';
+export type {
+  AdminIpVerification,
+  ITelemetryRepository,
+} from './telemetry.repository';
 
 export { telemetryDashboardRepository } from './telemetry-dashboard.repository';
 export type { ITelemetryDashboardRepository } from './telemetry-dashboard.repository';

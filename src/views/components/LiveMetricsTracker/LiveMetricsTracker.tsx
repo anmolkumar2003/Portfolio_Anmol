@@ -6,7 +6,10 @@ import type { LiveMetricsController } from '@viewmodels';
 import { CyberRobotAvatar } from './CyberRobotAvatar';
 import styles from './LiveMetricsTracker.module.scss';
 
-function formatCount(value: number): string {
+function formatCount(value: number | null): string {
+  if (value === null) {
+    return '—';
+  }
   return new Intl.NumberFormat('en-US').format(value);
 }
 
@@ -38,13 +41,18 @@ function TelemetryPanel({
   metrics: LiveMetricsController;
   onClose: () => void;
 }) {
-  const { totals, onlineCount, visitor, loading, error, supabaseReady } =
-    metrics;
+  const {
+    totals,
+    onlineCount,
+    visitor,
+    loading,
+    error,
+    errorCode,
+    supabaseReady,
+    diagnosticsHost,
+  } = metrics;
 
-  const ipValue =
-    visitor.ipLookupFailed || !visitor.publicIp
-      ? 'blocked / n/a'
-      : visitor.publicIp;
+  const countsUnavailable = totals === null;
 
   return (
     <div className={styles.hud} role="dialog" aria-modal="false" aria-label="Live telemetry">
@@ -54,9 +62,9 @@ function TelemetryPanel({
           <h2 className={styles.title}>System Diagnostics // Live</h2>
         </div>
         <div className={styles.headerActions}>
-          <span className={styles.livePill} data-online={!loading}>
+          <span className={styles.livePill} data-online={!loading && !error}>
             <span className={styles.pulse} aria-hidden="true" />
-            [{loading ? 'SYNC' : 'ONLINE'}]
+            [{loading ? 'SYNC' : error ? 'DEGRADED' : 'ONLINE'}]
           </span>
           <button
             type="button"
@@ -76,16 +84,20 @@ function TelemetryPanel({
 
         <section className={styles.diagnosticsPanel}>
           <div className={styles.metricsGrid}>
-            <Metric label="Views" value={formatCount(totals.totalViews)} />
+            <Metric
+              label="Views"
+              value={formatCount(totals?.totalViews ?? null)}
+              warn={countsUnavailable}
+            />
             <Metric
               label="Downloads"
-              value={formatCount(totals.totalDownloads)}
+              value={formatCount(totals?.totalDownloads ?? null)}
+              warn={countsUnavailable}
             />
-            <Metric label="Active now" value={formatCount(onlineCount)} />
             <Metric
-              label="Public IP"
-              value={ipValue}
-              warn={visitor.ipLookupFailed || !visitor.publicIp}
+              label="Active now"
+              value={formatCount(onlineCount)}
+              warn={onlineCount === null}
             />
             <Metric label="Browser" value={visitor.browserName} />
             <Metric label="OS" value={visitor.operatingSystem} />
@@ -95,6 +107,10 @@ function TelemetryPanel({
           <p className={styles.footer}>
             channel · telemetry-room
             {!supabaseReady ? ' · supabase offline' : ''}
+            {import.meta.env.DEV && diagnosticsHost
+              ? ` · host ${diagnosticsHost}`
+              : ''}
+            {import.meta.env.DEV && errorCode ? ` · ${errorCode}` : ''}
           </p>
           {error ? <p className={styles.error}>{error}</p> : null}
         </section>
@@ -103,7 +119,7 @@ function TelemetryPanel({
   );
 }
 
-/** Floating LIVE toggle + Cyber-OS glass HUD. */
+/** Floating LIVE toggle + Cyber-OS glass HUD (aggregates only — no visitor IPs). */
 export function LiveMetricsTracker() {
   const [open, setOpen] = useState(false);
   const reduceMotion = useReducedMotion();

@@ -56,6 +56,23 @@ function postBeacon(path: string, body: unknown): void {
   });
 }
 
+export interface AdminIpVerification {
+  readonly serverDetectedIp: string;
+  readonly headers: {
+    readonly xVercelForwardedFor: string | null;
+    readonly xForwardedFor: string | null;
+    readonly xRealIp: string | null;
+  };
+  readonly vercelGeo: {
+    readonly country: string | null;
+    readonly region: string | null;
+    readonly city: string | null;
+  };
+  readonly clientPublicIp: string | null;
+  readonly clientPublicIpFailed: boolean;
+  readonly matches: boolean | null;
+}
+
 export interface ITelemetryRepository {
   isEnabled(): boolean;
   startSession(): Promise<string | null>;
@@ -65,6 +82,7 @@ export interface ITelemetryRepository {
   endWatch(accessToken: string, watcherKey: string): void;
   createWatcherKey(): string;
   getHeartbeatIntervalMs(): number;
+  verifyAdminIp(accessToken: string): Promise<AdminIpVerification | null>;
 }
 
 /** Module-level lock prevents duplicate sessions under React Strict Mode. */
@@ -186,6 +204,73 @@ export class TelemetryRepository implements ITelemetryRepository {
       body,
       keepalive: true,
     });
+  }
+
+  /**
+   * Admin-only: compare server-detected request IP with this browser's public IP.
+   * Result stays in the authenticated admin UI — never sent to the public widget.
+   */
+  public async verifyAdminIp(
+    accessToken: string,
+  ): Promise<AdminIpVerification | null> {
+    try {
+      const [whoamiResponse, ipifyResult] = await Promise.all([
+        fetch('/api/telemetry/whoami', {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+          cache: 'no-store',
+        }),
+        fetch('https://api.ipify.org?format=json', { cache: 'no-store' })
+          .then(async (response) => {
+            if (!response.ok) {
+              return { ip: null as string | null, failed: true };
+            }
+            const payload = (await response.json()) as { ip?: unknown };
+            const ip = typeof payload.ip === 'string' ? payload.ip.trim() : '';
+            return ip ? { ip, failed: false } : { ip: null, failed: true };
+          })
+          .catch(() => ({ ip: null as string | null, failed: true })),
+      ]);
+
+      if (!whoamiResponse.ok) {
+        return null;
+      }
+
+      const payload = (await whoamiResponse.json()) as {
+        serverDetectedIp?: string;
+        headers?: AdminIpVerification['headers'];
+        vercelGeo?: AdminIpVerification['vercelGeo'];
+      };
+
+      const serverDetectedIp = payload.serverDetectedIp?.trim() || 'unknown';
+      const clientPublicIp = ipifyResult.ip;
+      const matches =
+        clientPublicIp && serverDetectedIp !== 'unknown'
+          ? clientPublicIp === serverDetectedIp
+          : null;
+
+      return {
+        serverDetectedIp,
+        headers: payload.headers ?? {
+          xVercelForwardedFor: null,
+          xForwardedFor: null,
+          xRealIp: null,
+        },
+        vercelGeo: payload.vercelGeo ?? {
+          country: null,
+          region: null,
+          city: null,
+        },
+        clientPublicIp,
+        clientPublicIpFailed: ipifyResult.failed,
+        matches,
+      };
+    } catch {
+      return null;
+    }
   }
 }
 

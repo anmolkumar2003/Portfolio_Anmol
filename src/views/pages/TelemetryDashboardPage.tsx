@@ -5,6 +5,10 @@ import {
   useTelemetryDashboard,
 } from '@viewmodels';
 import type { VisitorSessionRecord } from '@models';
+import {
+  telemetryRepository,
+  type AdminIpVerification,
+} from '@repositories';
 import styles from './TelemetryDashboardPage.module.scss';
 
 function formatTimestamp(value: string | null | undefined): string {
@@ -107,6 +111,83 @@ function SessionDetails({ session }: { session: VisitorSessionRecord }) {
         <span className={styles.detailValue}>{session.visitor_id}</span>
       </div>
     </div>
+  );
+}
+
+function IpVerificationPanel({ accessToken }: { accessToken: string }) {
+  const [result, setResult] = useState<AdminIpVerification | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const runCheck = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const next = await telemetryRepository.verifyAdminIp(accessToken);
+      if (!next) {
+        setResult(null);
+        setError('Could not verify IP (auth or API failure).');
+        return;
+      }
+      setResult(next);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <section className={styles.panel} aria-label="IP verification">
+      <h2 className={styles.sectionTitle}>IP verification</h2>
+      <p className={styles.note}>
+        Compares the server-detected request IP (Vercel headers) with your
+        current public IP. Visible only in this admin session — never on the
+        public Live widget.
+      </p>
+      <Button
+        type="button"
+        variant="secondary"
+        onClick={() => {
+          void runCheck();
+        }}
+      >
+        {loading ? 'Checking…' : 'Verify my IP'}
+      </Button>
+      {error ? <p className={styles.error}>{error}</p> : null}
+      {result ? (
+        <div className={styles.detailGrid}>
+          <div className={styles.detailItem}>
+            <span className={styles.detailLabel}>Server-detected IP</span>
+            <span className={styles.detailValue}>{result.serverDetectedIp}</span>
+          </div>
+          <div className={styles.detailItem}>
+            <span className={styles.detailLabel}>Your public IP (this browser)</span>
+            <span className={styles.detailValue}>
+              {result.clientPublicIpFailed
+                ? 'blocked / n/a'
+                : (result.clientPublicIp ?? '—')}
+            </span>
+          </div>
+          <div className={styles.detailItem}>
+            <span className={styles.detailLabel}>Match</span>
+            <span className={styles.detailValue}>
+              {result.matches === null
+                ? 'inconclusive'
+                : result.matches
+                  ? 'yes'
+                  : 'no'}
+            </span>
+          </div>
+          <div className={styles.detailItem}>
+            <span className={styles.detailLabel}>Vercel geo</span>
+            <span className={styles.detailValue}>
+              {[result.vercelGeo.city, result.vercelGeo.region, result.vercelGeo.country]
+                .filter(Boolean)
+                .join(', ') || '—'}
+            </span>
+          </div>
+        </div>
+      ) : null}
+    </section>
   );
 }
 
@@ -247,6 +328,9 @@ export function TelemetryDashboardPage() {
 
         {auth.configured && auth.session && auth.isAdmin ? (
           <>
+            {auth.session.access_token ? (
+              <IpVerificationPanel accessToken={auth.session.access_token} />
+            ) : null}
             <section className={`${styles.panel} ${styles.stats}`} aria-label="Telemetry status">
               <div className={styles.stat}>
                 <span className={styles.statLabel}>Tracking active since</span>

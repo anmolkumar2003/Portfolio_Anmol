@@ -6,11 +6,46 @@ function required(name: string): string {
   return value;
 }
 
+function normalizeOrigin(value: string): string | null {
+  const trimmed = value.trim().replace(/\/$/, '');
+  if (!trimmed) {
+    return null;
+  }
+
+  try {
+    const url = new URL(trimmed.includes('://') ? trimmed : `https://${trimmed}`);
+    return `${url.protocol}//${url.host}`;
+  } catch {
+    return null;
+  }
+}
+
+/** Configured allowlist plus Vercel deployment URLs (production + preview). */
 export function getAllowedOrigins(): string[] {
-  return (process.env.ALLOWED_ORIGINS ?? '')
+  const configured = (process.env.ALLOWED_ORIGINS ?? '')
     .split(',')
-    .map((origin) => origin.trim())
-    .filter(Boolean);
+    .map((origin) => normalizeOrigin(origin))
+    .filter((origin): origin is string => Boolean(origin));
+
+  const automatic: string[] = [];
+
+  const vercelUrl = process.env.VERCEL_URL?.trim();
+  if (vercelUrl) {
+    const normalized = normalizeOrigin(vercelUrl);
+    if (normalized) {
+      automatic.push(normalized);
+    }
+  }
+
+  const productionUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+  if (productionUrl) {
+    const normalized = normalizeOrigin(productionUrl);
+    if (normalized) {
+      automatic.push(normalized);
+    }
+  }
+
+  return [...new Set([...configured, ...automatic])];
 }
 
 export function getServerEnv() {

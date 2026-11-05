@@ -39,6 +39,7 @@ export type {
   VisitorSessionRecord,
 } from './telemetry';
 export type {
+  AnalyticsFailureCode,
   AnalyticsMetric,
   LiveMetricsState,
   PageAnalyticsTotals,
